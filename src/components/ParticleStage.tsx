@@ -18,6 +18,8 @@ const CONV_START = T_SVG_START / T_TOTAL;
 export const ParticleStage: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const svgRef    = useRef<HTMLImageElement>(null);
+  const bgRef     = useRef<HTMLDivElement>(null);
+
 
   // Everything mutable lives in one ref — never touched by React render
   const eng = useRef({
@@ -131,6 +133,15 @@ export const ParticleStage: React.FC = () => {
       }
       if (svg) svg.style.opacity = String(svgOp);
 
+      // ── Atmospheric Background breath reduction when SVG appears ──────────
+      let bgOp = 1.0;
+      if (masterP > CONV_START) {
+        const p = clamp((masterP - CONV_START) / (1.0 - CONV_START), 0, 1);
+        bgOp = 1.0 - 0.40 * easeInOutCubic(p); // Eases down by 40% (down to 0.60 opacity) when fully formed
+      }
+      const bg = bgRef.current;
+      if (bg) bg.style.opacity = bgOp.toFixed(3);
+
       // ── Draw particles ──────────────────────────────────────────────────
       if (pVis > 0.002) {
         const convP = clamp(e.elapsed / T_FORM, 0, 1);
@@ -179,7 +190,7 @@ export const ParticleStage: React.FC = () => {
 
   return (
     <div className="fixed inset-0 bg-black overflow-hidden">
-      <AtmosphericBackground />
+      <AtmosphericBackground ref={bgRef} />
 
       <canvas
         ref={canvasRef}
@@ -191,3 +202,4 @@ export const ParticleStage: React.FC = () => {
     </div>
   );
 };
+
