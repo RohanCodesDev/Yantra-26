@@ -221,6 +221,12 @@ export const ParticleStage: React.FC = () => {
 
   return (
     <div className="fixed inset-0 bg-black overflow-hidden">
+      <audio
+        src="/Ra.One BGM ( RIO REMIX ) @OFFICIALRIOMUSIC.mp3"
+        autoPlay
+        loop
+        className="hidden"
+      />
       <AtmosphericBackground ref={bgRef} />
 
       <canvas
