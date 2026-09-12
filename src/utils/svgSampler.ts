@@ -11,7 +11,8 @@ export async function sampleSVGPoints(
   svgUrl: string,
   count: number,
   vpW: number,
-  vpH: number
+  vpH: number,
+  yOffset: number = 0   // pixels to shift target points vertically
 ): Promise<TargetPoint[]> {
   return new Promise((resolve) => {
     const img = new Image();
@@ -65,7 +66,7 @@ export async function sampleSVGPoints(
           const p = filled[Math.floor(Math.random() * filled.length)];
           out.push({
             x: vpW / 2 + (p.x - cx) * scale + (Math.random() - 0.5) * 1.5,
-            y: vpH / 2 + (p.y - cy) * scale + (Math.random() - 0.5) * 1.5,
+            y: vpH / 2 + yOffset + (p.y - cy) * scale + (Math.random() - 0.5) * 1.5,
           });
         }
         resolve(out);
@@ -74,12 +75,12 @@ export async function sampleSVGPoints(
       }
     };
 
-    img.onerror = () => resolve(fallback(count, vpW, vpH));
+    img.onerror = () => resolve(fallback(count, vpW, vpH, yOffset));
     img.src = svgUrl;
   });
 }
 
-function fallback(count: number, w: number, h: number): TargetPoint[] {
+function fallback(count: number, w: number, h: number, yOffset: number = 0): TargetPoint[] {
   const oc = document.createElement("canvas");
   oc.width = 800; oc.height = 220;
   const ctx = oc.getContext("2d")!;
@@ -93,7 +94,7 @@ function fallback(count: number, w: number, h: number): TargetPoint[] {
   for (let y = 0; y < 220; y += 3)
     for (let x = 0; x < 800; x += 3)
       if (data[(y * 800 + x) * 4 + 3] > 100)
-        filled.push({ x: w / 2 + (x - 400) * 0.9, y: h / 2 + (y - 110) * 0.9 });
+        filled.push({ x: w / 2 + (x - 400) * 0.9, y: h / 2 + yOffset + (y - 110) * 0.9 });
 
   const out: TargetPoint[] = [];
   for (let i = 0; i < count; i++)
