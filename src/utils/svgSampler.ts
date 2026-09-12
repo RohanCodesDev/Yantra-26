@@ -55,8 +55,9 @@ export async function sampleSVGPoints(
         const cx = (minX + maxX) / 2;
         const cy = (minY + maxY) / 2;
 
-        // Scale so wordmark is ~75 vw (max 1000 px), capped by 40 vh
-        let scale = Math.min(vpW * 0.75, 1000) / bw;
+        // Scale so wordmark is ~75vw on desktop, ~92vw on mobile (max 1000 px)
+        const isMobile = vpW < 768;
+        let scale = Math.min(vpW * (isMobile ? 0.92 : 0.75), 1000) / bw;
         if (bh * scale > vpH * 0.42) scale = (vpH * 0.42) / bh;
 
         const out: TargetPoint[] = [];

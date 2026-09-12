@@ -7,7 +7,7 @@ import {
   COUNT_DESKTOP,
   COUNT_MOBILE,
 } from "@/constants/animation";
-import { easeInCubic, easeInOutCubic, clamp } from "@/utils/math";
+import { easeInOutCubic, clamp } from "@/utils/math";
 import { sampleSVGPoints } from "@/utils/svgSampler";
 import { AtmosphericBackground } from "./AtmosphericBackground";
 import { SVGOverlay } from "./SVGOverlay";
@@ -22,11 +22,12 @@ export const ParticleStage: React.FC = () => {
   // Everything mutable lives in one ref — never touched by React render
   const eng = useRef({
     particles: [] as Particle[],
+    ctx:       null as CanvasRenderingContext2D | null,
     ready:     false,
     elapsed:   0,
     lastTs:    0,
     rafId:     0,
-    mounted:   false,   // lifecycle guard stored in the ref, not a closure
+    mounted:   false,
   });
 
   useEffect(() => {
@@ -37,11 +38,13 @@ export const ParticleStage: React.FC = () => {
     const cv = canvasRef.current!;
     cv.width  = window.innerWidth;
     cv.height = window.innerHeight;
+    e.ctx = cv.getContext("2d", { alpha: true })!;
 
     // ── Build particle array ───────────────────────────────────────────────
     const buildParticles = async () => {
       const W = (cv.width  = window.innerWidth);
       const H = (cv.height = window.innerHeight);
+      e.ctx = cv.getContext("2d", { alpha: true })!;
       const mobile = W < 768;
       const count  = mobile ? COUNT_MOBILE : COUNT_DESKTOP;
 
@@ -49,10 +52,7 @@ export const ParticleStage: React.FC = () => {
       if (!e.mounted) return;
 
       const ps: Particle[] = targets.map((t) => {
-        // Spawn from a wide ring around the full viewport
         const angle  = Math.random() * Math.PI * 2;
-        // Radius goes from 0.45× to 0.85× of the larger dimension
-        // so particles travel across nearly the full screen
         const minR   = Math.max(W, H) * 0.45;
         const maxR   = Math.max(W, H) * 0.85;
         const radius = minR + Math.random() * (maxR - minR);
@@ -84,7 +84,6 @@ export const ParticleStage: React.FC = () => {
 
       if (!e.mounted) return;
 
-      // Reset clock precisely when particles are ready
       e.particles = ps;
       e.elapsed   = 0;
       e.lastTs    = performance.now();
@@ -93,25 +92,23 @@ export const ParticleStage: React.FC = () => {
 
     // ── Render loop ────────────────────────────────────────────────────────
     const tick = (ts: number) => {
-      if (!e.mounted) return;   // stops the loop if unmounted
+      if (!e.mounted) return;
 
       const svg = svgRef.current;
+      const ctx = e.ctx;
 
-      if (!e.ready) {
-        // Keep lastTs fresh so the first frame after ready has dt ≈ 16ms
+      if (!e.ready || !ctx) {
         e.lastTs = ts;
         e.rafId  = requestAnimationFrame(tick);
         return;
       }
 
-      // Clamp dt to two frames max to absorb tab-switch spikes
       const dt = Math.min((ts - e.lastTs) / 1000, 0.032);
       e.lastTs  = ts;
       e.elapsed += dt;
 
-      const W   = cv.width;
-      const H   = cv.height;
-      const ctx = cv.getContext("2d")!;
+      const W = cv.width;
+      const H = cv.height;
       ctx.clearRect(0, 0, W, H);
 
       const masterP = clamp(e.elapsed / T_TOTAL, 0, 1);
@@ -125,43 +122,37 @@ export const ParticleStage: React.FC = () => {
       }
 
       // ── SVG opacity (inverse of pVis window) ───────────────────────────
-      let svgOp = 0;
+      // Minimum 0.001 to keep the pre-warmed layer alive and avoid repaint spike
+      let svgOp = 0.001;
       if (masterP >= 1.0) {
         svgOp = 1;
       } else if (masterP > CONV_START) {
-        svgOp = easeInOutCubic((masterP - CONV_START) / (1.0 - CONV_START));
+        svgOp = Math.max(0.001, easeInOutCubic((masterP - CONV_START) / (1.0 - CONV_START)));
       }
-      if (svg) svg.style.opacity = svgOp.toFixed(4);
+      if (svg) svg.style.opacity = String(svgOp);
 
       // ── Draw particles ──────────────────────────────────────────────────
       if (pVis > 0.002) {
-        // convP: 0→1 over the full convergence window
         const convP = clamp(e.elapsed / T_FORM, 0, 1);
 
         for (const pt of e.particles) {
-          // Per-particle staggered local progress
           const local  = clamp((convP - pt.delay * 0.4) / (1 - pt.delay * 0.4), 0, 1);
-
-          // easeInOutCubic: zero initial and terminal velocity — no kick/snap
           const easedT = easeInOutCubic(local);
-
-          // sin² arc: smooth start and end, peaks in the middle
           const sinArc = Math.sin(local * Math.PI);
           const arc    = sinArc * sinArc;
 
           const baseX = pt.ix + (pt.tx - pt.ix) * easedT + pt.arcX * arc;
           const baseY = pt.iy + (pt.ty - pt.iy) * easedT + pt.arcY * arc;
 
-          // Organic micro-jitter, quadratically dampened to zero as formation completes
-          const jAmt = 2.0 * Math.pow(1 - convP, 2);
+          // Quadratic jitter dampening — smoothly reaches zero
+          const jAmt = 2.0 * (1 - convP) * (1 - convP);
           pt.x = baseX + Math.sin(e.elapsed * pt.jSpeed + pt.jPhase) * jAmt;
           pt.y = baseY + Math.cos(e.elapsed * pt.jSpeed * 1.1 + pt.jPhase) * jAmt;
 
           const a = pt.alpha * (0.35 + masterP * 0.65) * pVis;
           ctx.fillStyle = `rgba(${pt.r},${pt.g},${pt.b},${a.toFixed(3)})`;
-          const currentSize = pt.size * (0.8 + masterP * 0.3);
-          // Using fillRect instead of beginPath/arc is 3-5x faster for the browser
-          ctx.fillRect(pt.x - currentSize, pt.y - currentSize, currentSize * 2, currentSize * 2);
+          const s = pt.size * (0.8 + masterP * 0.3);
+          ctx.fillRect(pt.x - s, pt.y - s, s * 2, s * 2);
         }
       }
 
