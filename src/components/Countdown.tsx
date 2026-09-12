@@ -131,7 +131,7 @@ export function Countdown() {
                 className="uppercase tracking-[0.35em] text-center"
                 style={{
                     fontFamily: "'Lexend', sans-serif",
-                    fontSize: "clamp(0.6rem, 1.4vw, 0.8rem)",
+                    fontSize: "clamp(0.9rem, 1.8vw, 1.1rem)",
                     color: "rgba(200,50,50,0.6)",
                 }}
             >
