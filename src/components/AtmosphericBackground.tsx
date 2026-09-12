@@ -14,15 +14,8 @@ export const AtmosphericBackground = forwardRef<HTMLDivElement>((props, ref) => 
         }}
       />
 
-      {/* Red Light Effect - Fast & Punchy Breathing Pulse */}
-      <div
-        className="absolute inset-0 z-0 animate-red-light-breathe origin-center"
-        style={{
-          background:
-            "radial-gradient(ellipse 65% 45% at 50% 50%, rgba(240, 20, 50, 0.35) 0%, rgba(160, 10, 30, 0.14) 40%, transparent 75%)",
-          filter: "blur(24px)",
-        }}
-      />
+      {/* Red Light Effect - Fast & Punchy Breathing Pulse (Desktop & Mobile optimized) */}
+      <div className="absolute inset-0 z-0 animate-red-light-breathe origin-center red-light-glow" />
     </div>
   );
 });

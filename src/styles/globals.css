@@ -9,6 +9,7 @@ html, body {
   height: 100%;
 }
 
+/* Desktop breathing keyframes & glow (unchanged) */
 @keyframes redLightBreathe {
   0%, 100% {
     opacity: 0.15;
@@ -23,6 +24,35 @@ html, body {
 .animate-red-light-breathe {
   animation: redLightBreathe 1.8s ease-in-out infinite;
 }
+
+.red-light-glow {
+  background: radial-gradient(ellipse 65% 45% at 50% 50%, rgba(240, 20, 50, 0.35) 0%, rgba(160, 10, 30, 0.14) 40%, transparent 75%);
+  filter: blur(24px);
+}
+
+/* Mobile overrides (< 768px) for rich visibility & breathing */
+@media (max-width: 767px) {
+  .red-light-glow {
+    background: radial-gradient(ellipse 130% 75% at 50% 50%, rgba(255, 30, 65, 0.65) 0%, rgba(190, 15, 45, 0.28) 45%, transparent 85%);
+    filter: blur(16px);
+  }
+
+  @keyframes redLightBreatheMobile {
+    0%, 100% {
+      opacity: 0.22;
+      transform: scale(0.88);
+    }
+    50% {
+      opacity: 1.0;
+      transform: scale(1.14);
+    }
+  }
+
+  .animate-red-light-breathe {
+    animation: redLightBreatheMobile 1.8s ease-in-out infinite;
+  }
+}
+
 
 
 
