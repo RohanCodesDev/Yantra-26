@@ -50,3 +50,37 @@ html, body {
     animation: redLightBreatheMobile 1.8s ease-in-out infinite;
   }
 }
+
+/* ─── Home page background ─────────────────────────────────────────────── */
+
+/* 95% black / 5% deep crimson — red bleeds in from bottom corners */
+.home-bg {
+  background:
+    /* Bottom-left corner red bleed */
+    radial-gradient(ellipse 55% 45% at 0% 100%,
+      rgba(110, 4, 12, 0.55) 0%,
+      rgba(55, 2, 6, 0.22) 45%,
+      transparent 70%
+    ),
+    /* Bottom-right corner red bleed */
+    radial-gradient(ellipse 55% 45% at 100% 100%,
+      rgba(110, 4, 12, 0.55) 0%,
+      rgba(55, 2, 6, 0.22) 45%,
+      transparent 70%
+    ),
+    /* Base: near-pure black */
+    #030000;
+}
+
+/* SVG-turbulence noise overlay — no external files needed */
+.home-noise {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.038;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  mix-blend-mode: overlay;
+}
+

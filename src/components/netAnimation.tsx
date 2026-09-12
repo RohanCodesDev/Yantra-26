@@ -192,12 +192,12 @@ interface Props {
     linkThickness?: number
 }
 
-export default function ParticleDrift(props: Props) {
+function __OriginkitBase_ParticleDrift(props: Props) {
     const {
         style,
-        background = "transparent",
-        baseColor = "#FF0000",
-        accentColor = "#FF0000",
+        background = "#030509",
+        baseColor = "#FFFFFF",
+        accentColor = "#FDFF00",
         density = 400,
         dotSize = 6,
         speed = 50,
@@ -370,15 +370,13 @@ export default function ParticleDrift(props: Props) {
                 lines++
             }
 
-            // Global flicker effect
-            let flickerMult = 1.0;
-            // Every 1 second, introduce a short glitchy flicker
-            const flickerCycle = now % 1000;
-            if (flickerCycle < 150) {
-                flickerMult = Math.random() > 0.3 ? 0.3 : 0.9;
-            } else if (Math.random() < 0.03) {
-                // Occasional random dip
-                flickerMult = 0.6;
+            // Flicker every ~1 second
+            const flickerCycle = now % 1000
+            let flickerMult = 1.0
+            if (flickerCycle < 120) {
+                flickerMult = Math.random() > 0.35 ? 0.55 : 0.9
+            } else if (Math.random() < 0.02) {
+                flickerMult = 0.75
             }
 
             for (let i = 0; i < nCount; i++) {
@@ -402,15 +400,14 @@ export default function ParticleDrift(props: Props) {
                 const dx = ptr.x - nx[i]
                 const dy = ptr.y - ny[i]
                 const d = Math.sqrt(dx * dx + dy * dy)
-                const pointerLit = reach > 0 && d < reach ? 1 : 0
-                if (pointerLit === 1) {
+                const lit = reach > 0 && d < reach ? 1 : 0
+                if (lit === 1) {
                     const a = 0.5 * (1 - d / reach) * hv * flickerMult
                     pushLine(nx[i], ny[i], ptr.x, ptr.y, a, a, 1, LINKW)
                 }
                 gPos[i * 2] = nx[i]
                 gPos[i * 2 + 1] = ny[i]
-                // Keep dots naturally activated, apply flicker
-                gLit[i] = Math.max(0.6, pointerLit) * flickerMult
+                gLit[i] = lit * flickerMult
             }
 
             if (LINKD > 0) {
@@ -421,8 +418,7 @@ export default function ParticleDrift(props: Props) {
                         const dy = ny[i] - ny[j]
                         const dd = dx * dx + dy * dy
                         if (dd >= l2) continue
-                        // Make natural connections brighter (increased from 0.15) and apply flicker
-                        const a = 0.45 * (1 - Math.sqrt(dd) / LINKD) * flickerMult
+                        const a = 0.15 * (1 - Math.sqrt(dd) / LINKD) * flickerMult
                         pushLine(nx[i], ny[i], nx[j], ny[j], a, a, 0, LINKW)
                     }
                 }
@@ -434,8 +430,8 @@ export default function ParticleDrift(props: Props) {
             gl.enable(gl.BLEND)
             gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA)
 
-            const cb = parseColor(v.base as string, [1.0, 0.0, 0.0])
-            const ca = parseColor(v.accent as string, [1.0, 0.0, 0.0])
+            const cb = parseColor(v.base as string, [0.612, 0.639, 0.686])
+            const ca = parseColor(v.accent as string, [0.376, 0.647, 0.98])
 
             if (lines > 0) {
                 gl.useProgram(lineProg)
@@ -497,6 +493,7 @@ export default function ParticleDrift(props: Props) {
             raf = requestAnimationFrame(render)
         }
 
+        // Track globally so pointer-events-none wrapper doesn't block tracking
         const track = (e: PointerEvent) => {
             const r = canvas.getBoundingClientRect()
             if (r.width <= 0 || r.height <= 0) return
@@ -510,17 +507,15 @@ export default function ParticleDrift(props: Props) {
             ptrRef.current.y = -10000
         }
 
-        canvas.addEventListener("pointermove", track)
-        canvas.addEventListener("pointerenter", track)
-        canvas.addEventListener("pointerleave", onLeave)
+        window.addEventListener("pointermove", track)
+        window.addEventListener("pointerleave", onLeave)
 
         raf = requestAnimationFrame(render)
 
         return () => {
             cancelAnimationFrame(raf)
-            canvas.removeEventListener("pointermove", track)
-            canvas.removeEventListener("pointerenter", track)
-            canvas.removeEventListener("pointerleave", onLeave)
+            window.removeEventListener("pointermove", track)
+            window.removeEventListener("pointerleave", onLeave)
         }
     }, [])
 
@@ -544,4 +539,18 @@ export default function ParticleDrift(props: Props) {
             />
         </div>
     )
+}
+
+const __originkitPresetProps = {
+    baseColor: "#9F1A1A",
+    accentColor: "#FF1A1A",
+    density: 372,
+    dotSize: 2,
+    hover: 13,
+    linkDistance: 278,
+    linkThickness: 0.5,
+}
+
+export default function ParticleDrift(props: Record<string, unknown>) {
+    return <__OriginkitBase_ParticleDrift {...(__originkitPresetProps as Record<string, unknown>)} {...props} />
 }

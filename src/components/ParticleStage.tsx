@@ -177,7 +177,8 @@ export const ParticleStage: React.FC = () => {
       if (pVis > 0.002) {
         const convP = clamp(e.elapsed / T_FORM, 0, 1);
 
-        for (const pt of e.particles) {
+        for (let i = 0, len = e.particles.length; i < len; i++) {
+          const pt = e.particles[i];
           const local = clamp((convP - pt.delay * 0.4) / (1 - pt.delay * 0.4), 0, 1);
           const easedT = easeInOutCubic(local);
           const sinArc = Math.sin(local * Math.PI);
@@ -192,7 +193,8 @@ export const ParticleStage: React.FC = () => {
           pt.y = baseY + Math.cos(e.elapsed * pt.jSpeed * 1.1 + pt.jPhase) * jAmt;
 
           const a = pt.alpha * (0.35 + masterP * 0.65) * pVis;
-          ctx.fillStyle = `rgba(${pt.r},${pt.g},${pt.b},${a.toFixed(3)})`;
+          // Avoid expensive string allocations and toFixed() in hot loop
+          ctx.fillStyle = "rgba(" + pt.r + "," + pt.g + "," + pt.b + "," + (Math.round(a * 1000) / 1000) + ")";
           const s = pt.size * (0.8 + masterP * 0.3);
           ctx.fillRect(pt.x - s, pt.y - s, s * 2, s * 2);
         }
