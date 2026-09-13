@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 const PART1 = "WELCOME TO YANTRA '26, ";
 const PART2 = "LUCIFER.";
-const FULL  = PART1 + PART2;
+const FULL = PART1 + PART2;
 
 // Characters that look like corrupted/encoded data
 const NOISE = "▓▒░01101001101000110101101#%$@!?><{}[]|\\";
@@ -18,7 +18,7 @@ export const Intro: React.FC = () => {
     if (!p1 || !p2) return;
 
     const CYCLES_PER_CHAR = 10;
-    const FRAME_INTERVAL  = 40;
+    const FRAME_INTERVAL = 40;
 
     const lockFrame = FULL.split("").map((_, i) =>
       Math.floor(i * 2.2) + CYCLES_PER_CHAR
@@ -85,7 +85,7 @@ export const Intro: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative flex flex-col justify-start items-center text-center px-6 pt-0 pb-10">
+    <section className="relative flex flex-col justify-start items-center text-center px-6 pt-0 pb-10 -mt-8 md:-mt-16">
 
       {/* Scan-line overlay */}
       <div
@@ -190,7 +190,7 @@ export const Intro: React.FC = () => {
               document.getElementById("events-section")?.scrollIntoView({ behavior: "smooth" });
             }}
           >
-            <span className="relative z-10">INITIALISE EVENTS</span>
+            <span className="relative z-10">EXPLORE EVENTS</span>
             <span
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               style={{ background: "rgba(159,26,26,0.16)" }}
