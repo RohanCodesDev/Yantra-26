@@ -85,7 +85,7 @@ export const Intro: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative flex flex-col justify-start items-center text-center px-6 pt-0 pb-10 -mt-8 md:-mt-16">
+    <section className="relative flex flex-col justify-center items-center text-center px-4 sm:px-6 pt-0 pb-2 md:pb-4 -mt-11 sm:-mt-14 md:-mt-16">
 
       {/* Scan-line overlay */}
       <div
@@ -97,29 +97,33 @@ export const Intro: React.FC = () => {
         }}
       />
 
-      <div className="relative z-10 max-w-3xl w-full flex flex-col items-center gap-3">
+      <div className="relative z-10 max-w-3xl w-full flex flex-col items-center" style={{ gap: "clamp(0.25rem, 0.7vh, 0.7rem)" }}>
 
         {/* Robo-decode headline */}
         <h1
-          className="text-5xl sm:text-6xl md:text-7xl font-normal leading-none"
+          className="font-normal leading-tight flex flex-col items-center"
           style={{
-            fontFamily: "'Bebas Neue', sans-serif",
-            letterSpacing: "0.06em",
-            color: "#e8d5d5",
+            fontFamily: "'Josefin Sans', sans-serif",
+            fontSize: "clamp(1.5rem, 6.4vw, 4rem)",
+            letterSpacing: "0.035em",
           }}
         >
-          <span ref={part1Ref} />
-          <span ref={part2Ref} style={{ color: "#e03030" }} />
-          <span
-            className="inline-block w-0.5 h-8 md:h-10 bg-red-500 ml-1 align-middle"
-            style={{ animation: "blink 0.9s step-end infinite" }}
-          />
+          {/* Line 1 — always one line */}
+          <span className="whitespace-nowrap" style={{ color: "#ffffff" }} ref={part1Ref} />
+          {/* Line 2 — LUCIFER + cursor inline */}
+          <span className="flex items-center justify-center">
+            <span style={{ color: "#e03030" }} ref={part2Ref} />
+            <span
+              className="inline-block w-0.5 h-[1.1em] bg-red-500 ml-1.5 align-middle"
+              style={{ animation: "blink 0.9s step-end infinite" }}
+            />
+          </span>
         </h1>
 
         {/* Divider */}
-        <div className="flex items-center gap-4 w-full max-w-md">
+        <div className="flex items-center gap-3 sm:gap-4 w-full max-w-xs sm:max-w-md my-0.5 md:my-0">
           <div className="flex-1 h-px" style={{ background: "linear-gradient(to right, transparent, rgba(159,26,26,0.5))" }} />
-          <span style={{ color: "rgba(159,26,26,0.6)", fontSize: "0.6rem", fontFamily: "'Lexend', sans-serif", letterSpacing: "0.3em" }}>◆</span>
+          <span style={{ color: "rgba(159,26,26,0.6)", fontSize: "0.6rem", fontFamily: "'Josefin Sans', sans-serif", letterSpacing: "0.3em" }}>◆</span>
           <div className="flex-1 h-px" style={{ background: "linear-gradient(to left, transparent, rgba(159,26,26,0.5))" }} />
         </div>
 
@@ -132,18 +136,27 @@ export const Intro: React.FC = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: "1rem",
+            gap: "clamp(0.45rem, 1.3vh, 1.6rem)",
             width: "100%",
           }}
         >
           {/* Body text */}
           <div
-            className="max-w-2xl text-base md:text-lg leading-[1.85] space-y-4"
-            style={{ fontFamily: "'Lexend', sans-serif", color: "rgba(255,255,255,0.92)" }}
+            className="px-1 sm:px-4 md:px-0"
+            style={{
+              fontFamily: "'Josefin Sans', sans-serif",
+              fontSize: "clamp(1.02rem, 2.2vh, 1.4rem)",
+              lineHeight: 1.62,
+              color: "rgba(255,255,255,0.92)",
+              maxWidth: "42rem",
+              display: "flex",
+              flexDirection: "column",
+              gap: "clamp(0.25rem, 0.7vh, 0.7rem)",
+            }}
           >
             <p>
               YANTRA '26 is the flagship mini-fest by{" "}
-              <span style={{ color: "rgba(220,80,80,0.9)" }}>Xplorica</span> — a multidisciplinary
+              <span style={{ color: "rgba(220,80,80,0.9)", fontWeight: 700 }}>Xplorica</span> — a multidisciplinary
               club spanning technology, techno-management, design, and beyond. Where machines
               think, code breathes, and bold ideas meet fierce execution.
             </p>
@@ -154,22 +167,25 @@ export const Intro: React.FC = () => {
           </div>
 
           {/* Stats row */}
-          <div className="grid grid-cols-3 gap-6 w-full max-w-lg mt-1">
+          <div className="grid grid-cols-3 w-full max-w-lg px-1 sm:px-0" style={{ gap: "clamp(0.4rem, 2vw, 1.5rem)" }}>
             {[
               { val: "10+", label: "Events" },
               { val: "500+", label: "Participants" },
               { val: "1", label: "Day of Chaos" },
             ].map(({ val, label }) => (
-              <div key={label} className="flex flex-col items-center gap-1">
-                <span
-                  className="text-2xl md:text-3xl font-bold"
-                  style={{ fontFamily: "'Lexend', sans-serif", color: "rgba(220,60,60,0.9)" }}
-                >
+              <div key={label} className="flex flex-col items-center" style={{ gap: "clamp(0.12rem, 0.3vh, 0.4rem)" }}>
+                <span style={{ fontFamily: "'Josefin Sans', sans-serif", fontSize: "clamp(1.55rem, 3.2vh, 2.4rem)", fontWeight: 700, color: "rgba(220,60,60,0.9)" }}>
                   {val}
                 </span>
                 <span
-                  className="text-xs uppercase tracking-widest"
-                  style={{ fontFamily: "'Lexend', sans-serif", color: "rgba(180,140,140,0.55)" }}
+                  className="whitespace-nowrap"
+                  style={{
+                    fontFamily: "'Josefin Sans', sans-serif",
+                    fontSize: "clamp(0.72rem, 1.2vh, 0.95rem)",
+                    textTransform: "uppercase",
+                    letterSpacing: "clamp(0.08em, 0.3vw, 0.15em)",
+                    color: "rgba(235,210,210,0.78)",
+                  }}
                 >
                   {label}
                 </span>
@@ -179,22 +195,20 @@ export const Intro: React.FC = () => {
 
           {/* CTA */}
           <button
-            className="mt-1 px-10 py-3.5 text-sm uppercase tracking-[0.15em] font-semibold transition-all duration-300 relative group"
             style={{
-              fontFamily: "'Lexend', sans-serif",
-              border: "1px solid rgba(159,26,26,0.65)",
-              color: "rgba(230,100,100,0.9)",
-              background: "rgba(159,26,26,0.05)",
-            }}
-            onClick={() => {
-              document.getElementById("events-section")?.scrollIntoView({ behavior: "smooth" });
+              fontFamily: "'Josefin Sans', sans-serif",
+              fontSize: "clamp(0.92rem, 1.8vh, 1.15rem)",
+              padding: "clamp(0.55rem, 1.2vh, 1.1rem) clamp(1.6rem, 4.5vw, 3.5rem)",
+              letterSpacing: "0.14em",
+              fontWeight: 600,
+              whiteSpace: "nowrap",
+              border: "1px solid rgba(255,40,40,0.65)",
+              color: "rgba(255,140,140,0.95)",
+              background: "rgba(180,20,20,0.08)",
+              cursor: "default",
             }}
           >
-            <span className="relative z-10">EXPLORE EVENTS</span>
-            <span
-              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              style={{ background: "rgba(159,26,26,0.16)" }}
-            />
+            EVENTS COMING SOON
           </button>
         </div>
       </div>
