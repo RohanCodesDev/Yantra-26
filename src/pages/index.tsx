@@ -110,7 +110,7 @@ export default function Home() {
       if (!track) return;
 
       const trackHeight = track.offsetHeight;
-      const viewH = window.innerHeight;
+      const viewH = window.visualViewport ? window.visualViewport.height : window.innerHeight;
       const maxScroll = Math.max(1, trackHeight - viewH);
 
       const lenis = (window as unknown as { lenis?: import("lenis").default }).lenis;
@@ -135,6 +135,9 @@ export default function Home() {
 
     window.addEventListener("scroll", onNativeScroll, { passive: true });
     window.addEventListener("resize", onNativeScroll);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", onNativeScroll);
+    }
 
     let checkTimer: ReturnType<typeof setTimeout>;
     const bindLenis = () => {
@@ -157,6 +160,9 @@ export default function Home() {
       document.body.style.overflow = "";
       window.removeEventListener("scroll", onNativeScroll);
       window.removeEventListener("resize", onNativeScroll);
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener("resize", onNativeScroll);
+      }
       const lenis = (window as unknown as { lenis?: import("lenis").default }).lenis;
       if (lenis) {
         lenis.off("scroll", onLenisScroll);
@@ -169,7 +175,8 @@ export default function Home() {
     if (!isUnlockedRef.current) return;
     const track = trackRef.current;
     const lenis = (window as unknown as { lenis?: import("lenis").default }).lenis;
-    const maxScroll = track ? track.offsetHeight - window.innerHeight : window.innerHeight * 1.8;
+    const viewH = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    const maxScroll = track ? track.offsetHeight - viewH : viewH * 1.8;
 
     if (lenis) {
       lenis.scrollTo(maxScroll, {
@@ -186,20 +193,25 @@ export default function Home() {
       <Head>
         <title>YANTRA 2026</title>
         <meta name="description" content="YANTRA — Introductory Fest 2026" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
       </Head>
 
-      {/* 280vh track provides substantial, scroll-driven travel (180vh scroll distance) */}
+      {/* Dynamic track provides substantial, scroll-driven travel */}
       <div
         ref={trackRef}
         className="relative w-full bg-black"
-        style={{ height: "280vh" }}
+        style={{ height: "calc(var(--app-height, 100dvh) * 2.8)" }}
       >
         {/* Home Page: sits sticky at top-0 underneath (z-10) and is revealed as landing slides up */}
         <div
           ref={homeRef}
-          className="sticky top-0 z-10 w-full h-screen min-h-[100dvh] overflow-hidden"
-          style={{ willChange: "transform, opacity", transformOrigin: "center center" }}
+          className="sticky top-0 z-10 w-full overflow-hidden"
+          style={{
+            height: "var(--app-height, 100dvh)",
+            minHeight: "var(--app-height, 100dvh)",
+            willChange: "transform, opacity",
+            transformOrigin: "center center",
+          }}
         >
           <HomeContent />
         </div>
@@ -207,8 +219,11 @@ export default function Home() {
         {/* Landing Page: sits sticky at top-0 in front (z-20) with negative margin, slides completely up on scroll */}
         <div
           ref={landingRef}
-          className="sticky top-0 z-20 w-full h-screen min-h-[100dvh] -mt-[100vh] overflow-hidden select-none border-b border-red-500/20"
+          className="sticky top-0 z-20 w-full overflow-hidden select-none border-b border-red-500/20"
           style={{
+            height: "var(--app-height, 100dvh)",
+            minHeight: "var(--app-height, 100dvh)",
+            marginTop: "calc(-1 * var(--app-height, 100dvh))",
             willChange: "transform",
             boxShadow: "0 25px 50px -12px rgba(0,0,0,0.95), 0 8px 30px rgba(220, 20, 40, 0.15)",
           }}

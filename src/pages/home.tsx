@@ -5,12 +5,22 @@ import ParticleDrift from "@/components/netAnimation";
 
 export function HomeContent() {
     return (
-        <div id="home-section" className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto flex flex-col md:h-screen md:overflow-hidden bg-black">
+        <div
+            id="home-section"
+            className="relative w-full overflow-x-hidden overflow-y-auto flex flex-col md:overflow-hidden bg-black"
+            style={{
+                height: "var(--app-height, 100dvh)",
+                minHeight: "var(--app-height, 100dvh)",
+            }}
+        >
             {/* Pitch black base */}
             <div className="absolute inset-0 z-0 bg-black" />
 
             {/* Net animation layer */}
-            <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden opacity-60">
+            <div
+                className="absolute inset-0 z-[1] pointer-events-none overflow-hidden opacity-65"
+                style={{ opacity: 0.65 }}
+            >
                 <ParticleDrift background="transparent" />
             </div>
 
@@ -47,7 +57,12 @@ export function HomeContent() {
             </main>
 
             {/* Mobile Footer with FB, IG, LI */}
-            <footer className="relative z-[50] w-full flex md:hidden justify-center items-center gap-5 pb-3 pt-0">
+            <footer
+                className="relative z-[50] w-full flex md:hidden justify-center items-center gap-5 pt-0"
+                style={{
+                    paddingBottom: "calc(max(0.75rem, env(safe-area-inset-bottom, 0px)) + 0.25rem)",
+                }}
+            >
                 <a
                     href="https://facebook.com"
                     target="_blank"
