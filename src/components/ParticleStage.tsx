@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import Link from "next/link";
 import { Particle } from "@/types/particle";
 import {
   T_FORM,
@@ -223,6 +224,10 @@ export const ParticleStage: React.FC = () => {
 
   return (
     <div className="fixed inset-0 bg-black overflow-hidden">
+      <Link className="home-events-link" href="/events">
+        <span>EXPLORE EVENTS</span>
+        <span aria-hidden="true">↗</span>
+      </Link>
       <audio
         src="/Ra.One BGM ( RIO REMIX ) @OFFICIALRIOMUSIC.mp3"
         autoPlay
