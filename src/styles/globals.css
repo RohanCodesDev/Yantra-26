@@ -117,7 +117,8 @@ html, body {
 .event-row:hover { padding-right: 1rem; padding-left: 1rem; background: linear-gradient(90deg, rgba(110, 8, 18, 0.14), transparent); }
 .event-number { padding-top: 0.3rem; font-family: 'Josefin Sans', sans-serif; font-size: 2.2rem; }
 .event-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
-.event-heading h2 { margin: 0.35rem 0 0; color: #ff2030; font-family: 'Josefin Sans', sans-serif; font-size: clamp(2rem, 4vw, 3.4rem); font-weight: 400; letter-spacing: -0.03em; line-height: 1; }
+.event-heading h2 { margin: 0.35rem 0 0; color: #ff2030; font-family: 'Josefin Sans', sans-serif; font-size: clamp(2rem, 4vw, 3.4rem); font-weight: 400; letter-spacing: -0.03em; line-height: 1; transition: color 220ms ease; }
+.event-row:hover .event-heading h2 { color: #ffffff; }
 .event-arrow { color: rgba(255, 86, 86, 0.7); transition: transform 180ms ease, color 180ms ease; }
 .event-row:hover .event-arrow { color: #ff5260; transform: translate(3px, -3px); }
 .event-description { max-width: 36rem; margin: 0.75rem 0 1rem; color: rgba(255, 255, 255, 0.88); font-size: 1rem; line-height: 1.7; }

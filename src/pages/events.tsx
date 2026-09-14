@@ -67,19 +67,19 @@ const FILTERS: EventCategory[] = ["All", "Tech", "Nontech", "Flash", "photograph
 
 export default function EventsPage() {
   const [activeFilter, setActiveFilter] = useState<EventCategory>("All");
-  const [isVedyantraModalOpen, setIsVedyantraModalOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<typeof EVENT_DATA[0] | null>(null);
   const visibleEvents = EVENT_DATA.filter((event) => activeFilter === "All" || event.category === activeFilter);
 
   useEffect(() => {
-    if (!isVedyantraModalOpen) return;
+    if (!selectedEvent) return;
 
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setIsVedyantraModalOpen(false);
+      if (event.key === "Escape") setSelectedEvent(null);
     };
 
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
-  }, [isVedyantraModalOpen]);
+  }, [selectedEvent]);
 
   return (
     <>
@@ -115,34 +115,30 @@ export default function EventsPage() {
                   </div>
                   <p className="event-description">{event.description}</p>
                   <div className="event-meta"><span><CalendarDays size={14} /> {event.date} / {event.time}</span><span><MapPin size={14} /> {event.venue}</span></div>
-                  {event.title === "VEDYANTRA" && <button className="event-details-button" onClick={() => setIsVedyantraModalOpen(true)} type="button">VIEW DETAILS <ArrowUpRight size={14} /></button>}
+                  <button className="event-details-button" onClick={() => setSelectedEvent(event)} type="button">VIEW DETAILS <ArrowUpRight size={14} /></button>
                 </div>
               </article>
             ))}
           </div>
         </section>
       </main>
-      {isVedyantraModalOpen && (
-        <div className="event-modal-backdrop" onClick={() => setIsVedyantraModalOpen(false)} role="presentation">
-          <section className="event-modal" aria-labelledby="vedyantra-modal-title" aria-modal="true" role="dialog" onClick={(event) => event.stopPropagation()}>
-            <button className="event-modal-close" aria-label="Close VEDYANTRA details" onClick={() => setIsVedyantraModalOpen(false)} type="button"><X size={18} /></button>
+      {selectedEvent && (
+        <div className="event-modal-backdrop" onClick={() => setSelectedEvent(null)} role="presentation">
+          <section className="event-modal" aria-labelledby="event-modal-title" aria-modal="true" role="dialog" onClick={(event) => event.stopPropagation()}>
+            <button className="event-modal-close" aria-label="Close details" onClick={() => setSelectedEvent(null)} type="button"><X size={18} /></button>
             <div className="event-modal-visual" aria-hidden="true">
-              <span className="event-modal-number">01</span>
-              <span className="event-modal-coordinate">YANTRA / 26<br />INNOVATION LAB</span>
+              <span className="event-modal-number">{selectedEvent.number}</span>
+              <span className="event-modal-coordinate">YANTRA / 26<br />{selectedEvent.venue.toUpperCase()}</span>
             </div>
             <div className="event-modal-content">
-              <span className="event-category">TECH / FLAGSHIP EVENT</span>
-              <h2 id="vedyantra-modal-title">VEDYANTRA</h2>
-              <p className="event-modal-lead">Turn an unexpected idea into a useful digital tool during YANTRA&apos;s flagship build sprint.</p>
+              <span className="event-category">{selectedEvent.category.toUpperCase()} EVENT</span>
+              <h2 id="event-modal-title">{selectedEvent.title}</h2>
+              <p className="event-modal-lead">{selectedEvent.description}</p>
               <div className="event-modal-meta">
-                <span><CalendarDays size={15} /> 23 SEP 2026 / 09:00 AM - 09:00 PM</span>
-                <span><MapPin size={15} /> Innovation Lab</span>
+                <span><CalendarDays size={15} /> {selectedEvent.date} / {selectedEvent.time}</span>
+                <span><MapPin size={15} /> {selectedEvent.venue}</span>
               </div>
-              <div className="event-modal-copy">
-                <span>THE BRIEF</span>
-                <p>Teams have one day to find a problem, shape a sharp idea, and build a working prototype. Bring your curiosity, your crew, and the nerve to make something real.</p>
-              </div>
-              <button className="event-modal-action" onClick={() => setIsVedyantraModalOpen(false)} type="button">RETURN TO EVENTS <ArrowUpRight size={14} /></button>
+              <button className="event-modal-action" onClick={() => setSelectedEvent(null)} type="button">RETURN TO EVENTS <ArrowUpRight size={14} /></button>
             </div>
           </section>
         </div>
