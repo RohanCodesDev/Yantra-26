@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
-import { ArrowLeft, ArrowUpRight, CalendarDays, MapPin, X } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, CalendarDays, MapPin, Shield, X } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 
 type EventCategory = "All" | "Tech" | "Nontech" | "Flash" | "photography";
@@ -124,21 +124,174 @@ export default function EventsPage() {
       </main>
       {selectedEvent && (
         <div className="event-modal-backdrop" onClick={() => setSelectedEvent(null)} role="presentation">
-          <section className="event-modal" aria-labelledby="event-modal-title" aria-modal="true" role="dialog" onClick={(event) => event.stopPropagation()}>
-            <button className="event-modal-close" aria-label="Close details" onClick={() => setSelectedEvent(null)} type="button"><X size={18} /></button>
-            <div className="event-modal-visual" aria-hidden="true">
-              <span className="event-modal-number">{selectedEvent.number}</span>
-              <span className="event-modal-coordinate">YANTRA / 26<br />{selectedEvent.venue.toUpperCase()}</span>
-            </div>
-            <div className="event-modal-content">
-              <span className="event-category">{selectedEvent.category.toUpperCase()} EVENT</span>
-              <h2 id="event-modal-title">{selectedEvent.title}</h2>
-              <p className="event-modal-lead">{selectedEvent.description}</p>
-              <div className="event-modal-meta">
-                <span><CalendarDays size={15} /> {selectedEvent.date} / {selectedEvent.time}</span>
-                <span><MapPin size={15} /> {selectedEvent.venue}</span>
+          <section
+            className="event-modal"
+            aria-labelledby="event-modal-title"
+            aria-modal="true"
+            role="dialog"
+            onClick={(event) => event.stopPropagation()}
+            style={{
+              borderColor: `${selectedEvent.accent}55`,
+              boxShadow: `0 0 60px rgba(0, 0, 0, 0.95), 0 0 35px ${selectedEvent.accent}20, inset 0 0 25px ${selectedEvent.accent}08`,
+            }}
+          >
+            {/* Ambient dynamic radial glow */}
+            <div
+              className="event-modal-glow"
+              aria-hidden="true"
+              style={{
+                background: `radial-gradient(ellipse at 50% 0%, ${selectedEvent.accent}30 0%, transparent 65%)`,
+              }}
+            />
+
+            {/* CRT scanlines & noise overlay */}
+            <div className="event-modal-scanlines" aria-hidden="true" />
+            <div className="home-noise absolute inset-0 z-0 pointer-events-none opacity-30" aria-hidden="true" />
+
+            {/* Tactical HUD Corner reticles */}
+            <div className="hud-corner hud-corner-tl" style={{ borderColor: selectedEvent.accent }} />
+            <div className="hud-corner hud-corner-tr" style={{ borderColor: selectedEvent.accent }} />
+            <div className="hud-corner hud-corner-bl" style={{ borderColor: selectedEvent.accent }} />
+            <div className="hud-corner hud-corner-br" style={{ borderColor: selectedEvent.accent }} />
+
+            {/* Header Telemetry Bar */}
+            <header className="event-modal-topbar">
+              <div className="flex items-center gap-2.5">
+                <span
+                  className="event-modal-live-dot"
+                  style={{
+                    backgroundColor: selectedEvent.accent,
+                    boxShadow: `0 0 10px ${selectedEvent.accent}`,
+                  }}
+                />
+                <span className="event-modal-sys-tag">
+                  PROTOCOL // YN26-ID_{selectedEvent.number}
+                </span>
               </div>
-              <button className="event-modal-action" onClick={() => setSelectedEvent(null)} type="button">RETURN TO EVENTS <ArrowUpRight size={14} /></button>
+              <div
+                className="event-modal-category-pill"
+                style={{
+                  borderColor: `${selectedEvent.accent}66`,
+                  color: selectedEvent.accent,
+                  backgroundColor: `${selectedEvent.accent}14`,
+                }}
+              >
+                {selectedEvent.category.toUpperCase()} DIVISION
+              </div>
+              <button
+                className="event-modal-close-btn"
+                aria-label="Close details"
+                onClick={() => setSelectedEvent(null)}
+                type="button"
+              >
+                <span className="event-modal-esc-hint">ESC</span>
+                <X size={15} />
+              </button>
+            </header>
+
+            {/* Modal Body: strictly non-scrollable */}
+            <div className="event-modal-body">
+              {/* Event Hero Area */}
+              <div className="event-modal-hero">
+                <div className="event-modal-hero-left">
+                  <div className="event-modal-sec-code" style={{ color: selectedEvent.accent }}>
+                    <span>NODE // {selectedEvent.venue.toUpperCase()}</span>
+                    <span>•</span>
+                    <span>SECTOR_{selectedEvent.number}</span>
+                  </div>
+                  <h2 id="event-modal-title" className="event-modal-title">
+                    <GlitchText text={selectedEvent.title} />
+                  </h2>
+                </div>
+                <div className="event-modal-watermark" style={{ color: selectedEvent.accent }} aria-hidden="true">
+                  {selectedEvent.number}
+                </div>
+              </div>
+
+              {/* Telemetry Metrics Grid */}
+              <div className="event-modal-grid">
+                <div className="event-modal-card">
+                  <span className="event-modal-label">
+                    <CalendarDays size={13} style={{ color: selectedEvent.accent }} />
+                    TIMELINE
+                  </span>
+                  <span className="event-modal-val">{selectedEvent.date}</span>
+                  <span className="event-modal-subval">{selectedEvent.time}</span>
+                </div>
+                <div className="event-modal-card">
+                  <span className="event-modal-label">
+                    <MapPin size={13} style={{ color: selectedEvent.accent }} />
+                    ARENA / VENUE
+                  </span>
+                  <span className="event-modal-val">{selectedEvent.venue}</span>
+                  <span className="event-modal-subval">YANTRA FEST GROUNDS</span>
+                </div>
+                <div className="event-modal-card">
+                  <span className="event-modal-label">
+                    <Shield size={13} style={{ color: selectedEvent.accent }} />
+                    ACCESS & FORMAT
+                  </span>
+                  <span className="event-modal-val">OPEN TO ALL</span>
+                  <span className="event-modal-subval">SOLO & SQUAD ENTRIES</span>
+                </div>
+              </div>
+
+              {/* Cyber-divider */}
+              <div className="event-modal-divider" aria-hidden="true">
+                <div
+                  className="event-modal-divider-line"
+                  style={{
+                    background: `linear-gradient(to right, transparent, ${selectedEvent.accent}66, transparent)`,
+                  }}
+                />
+                <span className="event-modal-divider-diamond" style={{ color: selectedEvent.accent }}>
+                  ◆
+                </span>
+                <div
+                  className="event-modal-divider-line"
+                  style={{
+                    background: `linear-gradient(to right, transparent, ${selectedEvent.accent}66, transparent)`,
+                  }}
+                />
+              </div>
+
+              {/* Mission Briefing / Description */}
+              <div className="event-modal-briefing">
+                <span className="event-modal-briefing-label" style={{ color: selectedEvent.accent }}>
+                  // MISSION BRIEFING & OBJECTIVES
+                </span>
+                <p className="event-modal-lead">{selectedEvent.description}</p>
+              </div>
+
+              {/* Footer Action Deck */}
+              <footer className="event-modal-footer">
+                <div className="event-modal-footer-status">
+                  <span className="event-modal-status-text">STATUS: ACTIVE</span>
+                  <span className="text-white/30 hidden sm:inline">|</span>
+                  <span className="text-white/50 hidden sm:inline">CLEARANCE: CONFIRMED</span>
+                </div>
+                <div className="event-modal-footer-actions">
+                  <button
+                    className="event-modal-secondary-btn"
+                    onClick={() => setSelectedEvent(null)}
+                    type="button"
+                  >
+                    DISMISS
+                  </button>
+                  <button
+                    className="event-modal-primary-btn"
+                    style={{
+                      borderColor: selectedEvent.accent,
+                      background: `${selectedEvent.accent}18`,
+                    }}
+                    onClick={() => setSelectedEvent(null)}
+                    type="button"
+                  >
+                    <span>REGISTER EVENT</span>
+                    <ArrowUpRight size={14} />
+                  </button>
+                </div>
+              </footer>
             </div>
           </section>
         </div>
