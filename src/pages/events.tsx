@@ -1,9 +1,55 @@
-import Head from "next/head";
+﻿import Head from "next/head";
 import Link from "next/link";
+<<<<<<< HEAD
 import { ArrowLeft, ArrowUpRight, CalendarDays, MapPin, X } from "lucide-react";
 import { useEffect, useState } from "react";
+=======
+import { ArrowLeft, ArrowUpRight, CalendarDays, MapPin } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+>>>>>>> 9e47935b0c86a3eb1379f38dfa68a1084e7701c0
 
 type EventCategory = "All" | "Tech" | "Nontech" | "Flash" | "photography";
+
+const NOISE_CHARS = "v/R░01#%$@!?><{}[]|\\".split("");
+
+function GlitchText({ text }: { text: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let glitchTimeout: ReturnType<typeof setTimeout>;
+    let glitchInterval: ReturnType<typeof setInterval>;
+
+    const doGlitch = () => {
+      const count = 2 + Math.floor(Math.random() * 2);
+      const positions = Array.from({ length: count }, () =>
+        Math.floor(Math.random() * text.length)
+      );
+      let frames = 0;
+      glitchInterval = setInterval(() => {
+        const out = text.split("");
+        positions.forEach(pos => {
+          if (text[pos] !== " " && text[pos] !== ":") {
+            out[pos] = NOISE_CHARS[Math.floor(Math.random() * NOISE_CHARS.length)];
+          }
+        });
+        if (el) el.textContent = out.join("");
+        frames++;
+        if (frames >= 4) {
+          clearInterval(glitchInterval);
+          if (el) el.textContent = text;
+          glitchTimeout = setTimeout(doGlitch, 900 + Math.random() * 300);
+        }
+      }, 40);
+    };
+
+    glitchTimeout = setTimeout(doGlitch, Math.random() * 1200);
+    return () => { clearTimeout(glitchTimeout); clearInterval(glitchInterval); };
+  }, [text]);
+
+  return <span ref={ref}>{text}</span>;
+}
 
 const EVENT_DATA = [
   { number: "01", title: "VEDYANTRA", date: "23 SEP 2026", time: "09:00 AM - 09:00 PM", venue: "Innovation Lab", category: "Tech" as const, description: "A fast-moving build sprint for teams turning strange ideas into useful digital tools.", accent: "#ff2f3f" },
@@ -53,7 +99,7 @@ export default function EventsPage() {
           <span className="events-status"><i /> SYSTEM ONLINE</span>
         </header>
         <section className="relative z-10 mx-auto max-w-7xl px-6 pb-12 pt-16 text-center md:px-10 md:pt-24">
-          <h1 className="events-title">Explore Events</h1>
+          <h1 className="events-title">Explore <em>Events</em></h1>
         </section>
         <section className="relative z-10 mx-auto max-w-7xl px-6 pb-24 md:px-10">
           <div className="events-filter-bar" aria-label="Filter events by category">
@@ -68,7 +114,10 @@ export default function EventsPage() {
               <article className="event-row" key={event.number}>
                 <span className="event-number" style={{ color: event.accent }}>{event.number}</span>
                 <div className="event-main">
-                  <div className="event-heading"><div><span className="event-category">{event.category}</span><h2>{event.title}</h2></div><ArrowUpRight className="event-arrow" size={25} strokeWidth={1.5} /></div>
+                  <div className="event-heading">
+                    <div><span className="event-category">{event.category}</span><h2><GlitchText text={event.title} /></h2></div>
+                    <ArrowUpRight className="event-arrow" size={25} strokeWidth={1.5} />
+                  </div>
                   <p className="event-description">{event.description}</p>
                   <div className="event-meta"><span><CalendarDays size={14} /> {event.date} / {event.time}</span><span><MapPin size={14} /> {event.venue}</span></div>
                   {event.title === "VEDYANTRA" && <button className="event-details-button" onClick={() => setIsVedyantraModalOpen(true)} type="button">VIEW DETAILS <ArrowUpRight size={14} /></button>}

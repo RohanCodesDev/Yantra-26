@@ -1,10 +1,22 @@
 @import "tailwindcss";
 
+:root {
+  --app-height: 100dvh;
+}
+
+@supports not (height: 100dvh) {
+  :root {
+    --app-height: 100vh;
+  }
+}
+
 html, body {
   margin: 0;
   padding: 0;
   background: #000;
   min-height: 100%;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 400;
 }
 
 /* Desktop breathing keyframes & glow (unchanged) */
@@ -84,33 +96,34 @@ html, body {
   mix-blend-mode: overlay;
 }
 
-.home-events-link { position: absolute; top: 1.5rem; right: 1.5rem; z-index: 10; display: flex; align-items: center; gap: 0.65rem; border-bottom: 1px solid rgba(255, 42, 55, 0.55); padding: 0.35rem 0 0.55rem; color: rgba(255, 190, 190, 0.88); font-family: "Lexend", sans-serif; font-size: 0.65rem; letter-spacing: 0.16em; transition: color 180ms ease, border-color 180ms ease; }
+.home-events-link { position: absolute; top: 1.5rem; right: 1.5rem; z-index: 10; display: flex; align-items: center; gap: 0.65rem; border-bottom: 1px solid rgba(255, 42, 55, 0.55); padding: 0.35rem 0 0.55rem; color: rgba(255, 190, 190, 0.88); font-family: 'Josefin Sans', sans-serif; font-size: 0.65rem; letter-spacing: 0.16em; transition: color 180ms ease, border-color 180ms ease; }
 .home-events-link:hover { border-color: #ff2f3f; color: #ff5360; }
-.events-page { position: relative; background: radial-gradient(circle at 80% 8%, rgba(112, 8, 19, 0.24), transparent 30rem), radial-gradient(circle at 8% 90%, rgba(70, 6, 16, 0.2), transparent 26rem), #050505; font-family: "Lexend", sans-serif; }
+.events-page { position: relative; background: radial-gradient(circle at 80% 8%, rgba(112, 8, 19, 0.24), transparent 30rem), radial-gradient(circle at 8% 90%, rgba(70, 6, 16, 0.2), transparent 26rem), #050505; font-family: 'Josefin Sans', sans-serif; }
 .events-grid { position: absolute; inset: 0; pointer-events: none; opacity: 0.25; background-image: linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px); background-size: 72px 72px; mask-image: linear-gradient(to bottom, black, transparent 75%); }
 .events-back-link, .events-status { display: flex; align-items: center; gap: 0.6rem; color: rgba(255, 215, 215, 0.76); font-size: 0.68rem; letter-spacing: 0.16em; }
 .events-back-link { transition: color 180ms ease; }
 .events-back-link:hover { color: #ff5360; }
 .events-status { color: rgba(255, 112, 112, 0.7); }
 .events-status i { width: 6px; height: 6px; border-radius: 50%; background: #ff3345; box-shadow: 0 0 12px #ff3345; }
-.event-category, .events-filter-label, .events-count { color: rgba(255, 90, 90, 0.7); font-size: 0.66rem; letter-spacing: 0.2em; }
-.events-title { max-width: 800px; margin: 0; font-family: "Instrument Serif", Georgia, serif; font-size: clamp(4rem, 10vw, 8rem); font-weight: 400; letter-spacing: 0; line-height: 0.88; }
+.event-category, .events-filter-label, .events-count { color: rgba(255, 255, 255, 0.85); font-size: 0.78rem; letter-spacing: 0.18em; }
+.events-title { max-width: 100%; margin: 0; font-family: 'Josefin Sans', sans-serif; font-size: clamp(2rem, 5vw, 4rem); font-weight: 400; letter-spacing: 0.02em; line-height: 1.1; white-space: nowrap; }
 .events-title { color: #fff4f4; }
 .events-filter-bar { display: flex; align-items: center; gap: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.16); border-bottom: 1px solid rgba(255, 255, 255, 0.16); padding: 1rem 0; }
 .events-count { margin-left: auto; color: rgba(255, 225, 225, 0.5); }
-.events-filter { border: 1px solid rgba(255, 255, 255, 0.13); padding: 0.52rem 0.8rem; color: rgba(255, 225, 225, 0.58); font-size: 0.68rem; letter-spacing: 0.04em; transition: border-color 180ms ease, background 180ms ease, color 180ms ease; }
+.events-filter { border: 1px solid rgba(255, 255, 255, 0.13); padding: 0.65rem 1.2rem; color: rgba(255, 225, 225, 0.7); font-size: 0.85rem; letter-spacing: 0.06em; transition: border-color 180ms ease, background 180ms ease, color 180ms ease; }
 .events-filter:hover, .events-filter.is-active { border-color: rgba(255, 58, 70, 0.8); background: rgba(165, 16, 28, 0.22); color: #fff; }
-.events-list { margin-top: 1.5rem; }
-.event-row { display: grid; grid-template-columns: 4rem minmax(0, 1fr); gap: 1.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.12); padding: 2rem 0; transition: padding 220ms ease, background 220ms ease; }
+.events-list { margin-top: 1.25rem; }
+.event-row { display: grid; grid-template-columns: 4rem minmax(0, 1fr); gap: 1.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.12); padding: 1.35rem 0; transition: padding 220ms ease, background 220ms ease; }
 .event-row:hover { padding-right: 1rem; padding-left: 1rem; background: linear-gradient(90deg, rgba(110, 8, 18, 0.14), transparent); }
-.event-number { padding-top: 0.3rem; font-family: "Instrument Serif", Georgia, serif; font-size: 1.8rem; }
+.event-number { padding-top: 0.3rem; font-family: 'Josefin Sans', sans-serif; font-size: 2.2rem; }
 .event-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
-.event-heading h2 { margin: 0.45rem 0 0; color: #fff4f4; font-family: "Instrument Serif", Georgia, serif; font-size: clamp(2rem, 4vw, 3.4rem); font-weight: 400; line-height: 1; }
+.event-heading h2 { margin: 0.35rem 0 0; color: #ff2030; font-family: 'Josefin Sans', sans-serif; font-size: clamp(2rem, 4vw, 3.4rem); font-weight: 400; letter-spacing: -0.03em; line-height: 1; }
 .event-arrow { color: rgba(255, 86, 86, 0.7); transition: transform 180ms ease, color 180ms ease; }
 .event-row:hover .event-arrow { color: #ff5260; transform: translate(3px, -3px); }
-.event-description { max-width: 36rem; margin: 1rem 0 1.3rem; color: rgba(255, 225, 225, 0.6); font-size: 0.86rem; line-height: 1.7; }
-.event-meta { display: flex; flex-wrap: wrap; gap: 1.4rem; color: rgba(255, 200, 200, 0.54); font-size: 0.67rem; letter-spacing: 0.04em; }
+.event-description { max-width: 36rem; margin: 0.75rem 0 1rem; color: rgba(255, 255, 255, 0.88); font-size: 1rem; line-height: 1.7; }
+.event-meta { display: flex; flex-wrap: wrap; gap: 1.4rem; color: rgba(255, 255, 255, 0.7); font-size: 0.8rem; letter-spacing: 0.04em; }
 .event-meta span { display: flex; align-items: center; gap: 0.45rem; }
+<<<<<<< HEAD
 .event-details-button, .event-modal-action { display: inline-flex; align-items: center; gap: 0.45rem; border: 1px solid rgba(255, 82, 96, 0.6); padding: 0.65rem 0.85rem; color: #ffdada; font-size: 0.65rem; letter-spacing: 0.12em; transition: background 180ms ease, border-color 180ms ease, color 180ms ease; }
 .event-details-button { margin-top: 1.35rem; }
 .event-details-button:hover, .event-modal-action:hover { border-color: #ff5260; background: rgba(165, 16, 28, 0.28); color: #fff; }
@@ -135,4 +148,26 @@ html, body {
 .event-modal-copy > span { color: rgba(255, 90, 90, 0.7); font-size: 0.66rem; letter-spacing: 0.2em; }
 .event-modal-copy p { margin: 0.8rem 0 0; }
 @media (max-width: 640px) { .home-events-link { top: 1rem; right: 1rem; } .events-filter-bar { align-items: flex-start; flex-direction: column; gap: 0.8rem; } .events-count { margin-left: 0; } .event-row { grid-template-columns: 2rem minmax(0, 1fr); gap: 0.8rem; } .event-row:hover { padding-right: 0.5rem; padding-left: 0.5rem; } .event-number { font-size: 1.35rem; } .event-meta { flex-direction: column; gap: 0.55rem; } .event-modal { display: block; overflow-y: auto; } .event-modal-visual { min-height: 38vh; padding: 2rem; } .event-modal-content { padding: 2.5rem 1.5rem 3rem; } .event-modal h2 { font-size: clamp(3.6rem, 18vw, 6rem); } }
+=======
+@media (max-width: 768px) { .home-events-link { display: none !important; } }
+@media (max-width: 640px) { .events-filter-bar { align-items: flex-start; flex-direction: column; gap: 0.8rem; } .events-count { margin-left: 0; } .event-row { grid-template-columns: 2rem minmax(0, 1fr); gap: 0.8rem; } .event-row:hover { padding-right: 0.5rem; padding-left: 0.5rem; } .event-number { font-size: 1.35rem; } .event-meta { flex-direction: column; gap: 0.55rem; } }
+>>>>>>> 9e47935b0c86a3eb1379f38dfa68a1084e7701c0
 
+@keyframes scrollDot {
+  0% {
+    transform: translateY(0);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(6px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(11px);
+    opacity: 0;
+  }
+}
+
+.animate-scroll-dot {
+  animation: scrollDot 1.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}

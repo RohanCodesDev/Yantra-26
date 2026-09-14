@@ -66,7 +66,7 @@ function CountUnit({ value, label }: UnitProps) {
                 <span
                     className="relative z-10 font-black tabular-nums select-none"
                     style={{
-                        fontFamily: "'Instrument Serif', serif",
+                        fontFamily: "'Josefin Sans', sans-serif",
                         fontSize: "clamp(1.75rem, 6vw, 3.5rem)",
                         color: "#FF1A1A",
                         letterSpacing: "2px",
@@ -79,7 +79,7 @@ function CountUnit({ value, label }: UnitProps) {
             <span
                 className="uppercase tracking-[0.22em] select-none"
                 style={{
-                    fontFamily: "'Lexend', sans-serif",
+                    fontFamily: "'Josefin Sans', sans-serif",
                     fontSize: "clamp(0.55rem, 1.2vw, 0.75rem)",
                     color: "rgba(200,40,40,0.7)",
                     letterSpacing: "0.25em",
@@ -96,7 +96,7 @@ function Separator() {
         <span
             className="font-black select-none mb-3 md:mb-6 mx-0.5 md:mx-1"
             style={{
-                fontFamily: "'Lexend', sans-serif",
+                fontFamily: "'Josefin Sans', sans-serif",
                 fontSize: "clamp(1.2rem, 4vw, 2.8rem)",
                 color: "rgba(200,0,0,0.55)",
             }}
@@ -130,7 +130,7 @@ export function Countdown() {
             <p
                 className="uppercase tracking-[0.35em] text-center"
                 style={{
-                    fontFamily: "'Lexend', sans-serif",
+                    fontFamily: "'Josefin Sans', sans-serif",
                     fontSize: "clamp(0.9rem, 1.8vw, 1.1rem)",
                     color: "rgba(200,50,50,0.6)",
                 }}
@@ -141,7 +141,7 @@ export function Countdown() {
             {isExpired ? (
                 <p
                     className="font-bold uppercase tracking-widest"
-                    style={{ fontFamily: "'Lexend', sans-serif", color: "#FF1A1A", fontSize: "1.5rem" }}
+                    style={{ fontFamily: "'Josefin Sans', sans-serif", color: "#FF1A1A", fontSize: "1.5rem" }}
                 >
                     It&apos;s happening now!
                 </p>

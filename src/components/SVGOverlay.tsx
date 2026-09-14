@@ -15,7 +15,7 @@ export const SVGOverlay = forwardRef<HTMLImageElement>((props, ref) => {
         opacity: 0.001,
         height: "auto",
         willChange: "opacity",
-        transform: "translateX(-50%) translateY(calc(-50% - 15vh))",
+        transform: "translateX(-50%) translateY(calc(-50% - calc(var(--app-height, 100dvh) * 0.15)))",
         top: "50%",
       }}
       draggable={false}
