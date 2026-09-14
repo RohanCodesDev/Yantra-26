@@ -152,6 +152,7 @@ export const Intro: React.FC = () => {
               display: "flex",
               flexDirection: "column",
               gap: "clamp(0.25rem, 0.7vh, 0.7rem)",
+              animation: decoded ? "textFlicker 7s infinite" : "none",
             }}
           >
             <p>
@@ -217,6 +218,14 @@ export const Intro: React.FC = () => {
         @keyframes blink {
           0%, 100% { opacity: 1; }
           50% { opacity: 0; }
+        }
+        @keyframes textFlicker {
+          0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+            opacity: 1;
+          }
+          20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+            opacity: 0.2;
+          }
         }
       `}</style>
     </section>

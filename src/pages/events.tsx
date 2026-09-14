@@ -1,12 +1,7 @@
-﻿import Head from "next/head";
+import Head from "next/head";
 import Link from "next/link";
-<<<<<<< HEAD
 import { ArrowLeft, ArrowUpRight, CalendarDays, MapPin, X } from "lucide-react";
-import { useEffect, useState } from "react";
-=======
-import { ArrowLeft, ArrowUpRight, CalendarDays, MapPin } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
->>>>>>> 9e47935b0c86a3eb1379f38dfa68a1084e7701c0
+import { useEffect, useState, useRef } from "react";
 
 type EventCategory = "All" | "Tech" | "Nontech" | "Flash" | "photography";
 

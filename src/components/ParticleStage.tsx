@@ -229,7 +229,16 @@ export const ParticleStage: React.FC<ParticleStageProps> = ({
     buildParticles();
 
     // ── Resize ─────────────────────────────────────────────────────────────
+    let lastW = window.innerWidth;
+    let lastH = getViewportH();
+
     const onResize = () => {
+      const nw = window.innerWidth;
+      const nh = getViewportH();
+      // Ignore minor resize events (e.g. scrollbars appearing or mobile address bars)
+      if (Math.abs(nw - lastW) < 20 && Math.abs(nh - lastH) < 80) return;
+      lastW = nw;
+      lastH = nh;
       e.ready = false;
       buildParticles();
     };

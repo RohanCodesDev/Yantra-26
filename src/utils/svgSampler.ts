@@ -42,24 +42,14 @@ export async function sampleSVGPoints(
 
         if (!filled.length) return resolve(fallback(count, vpW, vpH));
 
-        // Bounding box
-        let minX = SW, maxX = 0, minY = SH, maxY = 0;
-        for (const p of filled) {
-          if (p.x < minX) minX = p.x;
-          if (p.x > maxX) maxX = p.x;
-          if (p.y < minY) minY = p.y;
-          if (p.y > maxY) maxY = p.y;
-        }
+        // Scale particles to match the <img /> tag in SVGOverlay exactly.
+        // The img tag scales the ENTIRE SVG to ~75vw/92vw (max 1000px).
+        // So we must scale based on SW (the full canvas width), not the bounding box of filled pixels.
+        const cx = SW / 2;
+        const cy = SH / 2;
 
-        const bw = maxX - minX || 1;
-        const bh = maxY - minY || 1;
-        const cx = (minX + maxX) / 2;
-        const cy = (minY + maxY) / 2;
-
-        // Scale so wordmark is ~75vw on desktop, ~92vw on mobile (max 1000 px)
         const isMobile = vpW < 768;
-        let scale = Math.min(vpW * (isMobile ? 0.92 : 0.75), 1000) / bw;
-        if (bh * scale > vpH * 0.42) scale = (vpH * 0.42) / bh;
+        const scale = Math.min(vpW * (isMobile ? 0.92 : 0.75), 1000) / SW;
 
         const out: TargetPoint[] = [];
         for (let i = 0; i < count; i++) {
