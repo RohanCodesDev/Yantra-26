@@ -154,6 +154,7 @@ html, body {
   width: 100%;
   max-width: 52rem;
   max-height: min(90dvh, 670px);
+  min-height: min(90dvh, 560px);
   overflow: hidden;
   border: 1px solid rgba(255, 48, 64, 0.45);
   background: #060203;
@@ -441,7 +442,7 @@ html, body {
 .event-modal-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding-top: 0.85rem;
   gap: 1rem;
@@ -503,6 +504,101 @@ html, body {
   color: #ffffff;
   box-shadow: 0 0 24px rgba(255, 30, 50, 0.55);
   transform: translateY(-1px);
+}
+
+/* Event Registration Form */
+.event-register-form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+  gap: 1.15rem;
+}
+
+.event-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.95rem;
+}
+
+@media (max-width: 640px) {
+  .event-form-grid {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+}
+
+.event-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.event-form-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: rgba(255, 200, 200, 0.7);
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.event-form-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.event-form-input-icon {
+  position: absolute;
+  left: 0.8rem;
+  pointer-events: none;
+  opacity: 0.55;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.event-form-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  padding: 0.65rem 0.85rem 0.65rem 2.35rem;
+  font-size: 0.85rem;
+  font-family: inherit;
+  letter-spacing: 0.03em;
+  outline: none;
+  transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+}
+
+.event-form-input:focus {
+  border-color: rgba(255, 48, 64, 0.7);
+  background: rgba(255, 30, 50, 0.05);
+  box-shadow: 0 0 12px rgba(255, 48, 64, 0.2);
+}
+
+.event-form-input::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.event-modal-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  padding: 0.25rem 0.6rem;
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 215, 215, 0.75);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+
+.event-modal-back-btn:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #ffffff;
 }
 
 @media (max-width: 768px) { .home-events-link { display: none !important; } }

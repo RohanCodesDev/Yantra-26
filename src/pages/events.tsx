@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
-import { ArrowLeft, ArrowUpRight, CalendarDays, MapPin, Shield, X } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, CalendarDays, MapPin, Ticket, X, User, Mail, Phone, Building2, CheckCircle2 } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 
 type EventCategory = "All" | "Hardware" | "Software" | "Non-Tech" | "Flash" | "Photography";
@@ -213,18 +213,34 @@ const FILTERS: EventCategory[] = ["All", "Hardware", "Software", "Non-Tech", "Fl
 export default function EventsPage() {
   const [activeFilter, setActiveFilter] = useState<EventCategory>("All");
   const [selectedEvent, setSelectedEvent] = useState<typeof EVENT_DATA[0] | null>(null);
+  const [registeringEvent, setRegisteringEvent] = useState<typeof EVENT_DATA[0] | null>(null);
+  const [regForm, setRegForm] = useState({ name: "", email: "", phone: "", college: "" });
+  const [regSubmitted, setRegSubmitted] = useState(false);
+  const [regPassId, setRegPassId] = useState("");
+
   const visibleEvents = EVENT_DATA.filter((event) => activeFilter === "All" || event.category === activeFilter);
 
+  const handleRegisterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!regForm.name || !regForm.email || !regForm.phone) return;
+    const randomId = Math.floor(1000 + Math.random() * 9000);
+    setRegPassId(`YN26-${registeringEvent?.number || "EV"}-${randomId}`);
+    setRegSubmitted(true);
+  };
+
   useEffect(() => {
-    if (!selectedEvent) return;
+    if (!selectedEvent && !registeringEvent) return;
 
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setSelectedEvent(null);
+      if (event.key === "Escape") {
+        setSelectedEvent(null);
+        setRegisteringEvent(null);
+      }
     };
 
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
-  }, [selectedEvent]);
+  }, [selectedEvent, registeringEvent]);
 
   return (
     <>
@@ -299,20 +315,8 @@ export default function EventsPage() {
             <div className="hud-corner hud-corner-bl" style={{ borderColor: selectedEvent.accent }} />
             <div className="hud-corner hud-corner-br" style={{ borderColor: selectedEvent.accent }} />
 
-            {/* Header Telemetry Bar */}
+            {/* Header */}
             <header className="event-modal-topbar">
-              <div className="flex items-center gap-2.5">
-                <span
-                  className="event-modal-live-dot"
-                  style={{
-                    backgroundColor: selectedEvent.accent,
-                    boxShadow: `0 0 10px ${selectedEvent.accent}`,
-                  }}
-                />
-                <span className="event-modal-sys-tag">
-                  PROTOCOL // YN26-ID_{selectedEvent.number}
-                </span>
-              </div>
               <div
                 className="event-modal-category-pill"
                 style={{
@@ -321,7 +325,7 @@ export default function EventsPage() {
                   backgroundColor: `${selectedEvent.accent}14`,
                 }}
               >
-                {selectedEvent.category.toUpperCase()} DIVISION
+                {selectedEvent.category.toUpperCase()}
               </div>
               <button
                 className="event-modal-close-btn"
@@ -334,16 +338,11 @@ export default function EventsPage() {
               </button>
             </header>
 
-            {/* Modal Body: strictly non-scrollable */}
+            {/* Modal Body */}
             <div className="event-modal-body">
               {/* Event Hero Area */}
               <div className="event-modal-hero">
                 <div className="event-modal-hero-left">
-                  <div className="event-modal-sec-code" style={{ color: selectedEvent.accent }}>
-                    <span>NODE // {selectedEvent.venue.toUpperCase()}</span>
-                    <span>•</span>
-                    <span>SECTOR_{selectedEvent.number}</span>
-                  </div>
                   <h2 id="event-modal-title" className="event-modal-title">
                     <GlitchText text={selectedEvent.title} />
                   </h2>
@@ -353,7 +352,7 @@ export default function EventsPage() {
                 </div>
               </div>
 
-              {/* Telemetry Metrics Grid */}
+              {/* 3 Sections: Timeline, Venue, Reg. Fees */}
               <div className="event-modal-grid">
                 <div className="event-modal-card">
                   <span className="event-modal-label">
@@ -366,22 +365,22 @@ export default function EventsPage() {
                 <div className="event-modal-card">
                   <span className="event-modal-label">
                     <MapPin size={13} style={{ color: selectedEvent.accent }} />
-                    ARENA / VENUE
+                    VENUE
                   </span>
                   <span className="event-modal-val">{selectedEvent.venue}</span>
-                  <span className="event-modal-subval">YANTRA FEST GROUNDS</span>
+                  <span className="event-modal-subval">FEST GROUNDS</span>
                 </div>
                 <div className="event-modal-card">
                   <span className="event-modal-label">
-                    <Shield size={13} style={{ color: selectedEvent.accent }} />
-                    ACCESS & FORMAT
+                    <Ticket size={13} style={{ color: selectedEvent.accent }} />
+                    REG. FEES
                   </span>
-                  <span className="event-modal-val">OPEN TO ALL</span>
-                  <span className="event-modal-subval">SOLO & SQUAD ENTRIES</span>
+                  <span className="event-modal-val">FREE</span>
+                  <span className="event-modal-subval">ENTRY</span>
                 </div>
               </div>
 
-              {/* Cyber-divider */}
+              {/* Divider */}
               <div className="event-modal-divider" aria-hidden="true">
                 <div
                   className="event-modal-divider-line"
@@ -400,21 +399,16 @@ export default function EventsPage() {
                 />
               </div>
 
-              {/* Mission Briefing / Description */}
+              {/* Event Description */}
               <div className="event-modal-briefing">
                 <span className="event-modal-briefing-label" style={{ color: selectedEvent.accent }}>
-                  // MISSION BRIEFING & OBJECTIVES
+                  ABOUT THE EVENT
                 </span>
                 <p className="event-modal-lead">{selectedEvent.description}</p>
               </div>
 
-              {/* Footer Action Deck */}
+              {/* Footer */}
               <footer className="event-modal-footer">
-                <div className="event-modal-footer-status">
-                  <span className="event-modal-status-text">STATUS: ACTIVE</span>
-                  <span className="text-white/30 hidden sm:inline">|</span>
-                  <span className="text-white/50 hidden sm:inline">CLEARANCE: CONFIRMED</span>
-                </div>
                 <div className="event-modal-footer-actions">
                   <button
                     className="event-modal-secondary-btn"
@@ -429,14 +423,256 @@ export default function EventsPage() {
                       borderColor: selectedEvent.accent,
                       background: `${selectedEvent.accent}18`,
                     }}
-                    onClick={() => setSelectedEvent(null)}
+                    onClick={() => {
+                      setRegisteringEvent(selectedEvent);
+                      setSelectedEvent(null);
+                      setRegSubmitted(false);
+                      setRegForm({ name: "", email: "", phone: "", college: "" });
+                    }}
                     type="button"
                   >
-                    <span>REGISTER EVENT</span>
+                    <span>REGISTER NOW</span>
                     <ArrowUpRight size={14} />
                   </button>
                 </div>
               </footer>
+            </div>
+          </section>
+        </div>
+      )}
+      {registeringEvent && (
+        <div
+          className="event-modal-backdrop"
+          onClick={() => setRegisteringEvent(null)}
+          role="presentation"
+        >
+          <section
+            className="event-modal"
+            aria-labelledby="register-modal-title"
+            aria-modal="true"
+            role="dialog"
+            onClick={(event) => event.stopPropagation()}
+            style={{
+              borderColor: `${registeringEvent.accent}55`,
+              boxShadow: `0 0 60px rgba(0, 0, 0, 0.95), 0 0 35px ${registeringEvent.accent}20, inset 0 0 25px ${registeringEvent.accent}08`,
+            }}
+          >
+            {/* Ambient dynamic radial glow */}
+            <div
+              className="event-modal-glow"
+              aria-hidden="true"
+              style={{
+                background: `radial-gradient(ellipse at 50% 0%, ${registeringEvent.accent}30 0%, transparent 65%)`,
+              }}
+            />
+
+            {/* CRT scanlines & noise overlay */}
+            <div className="event-modal-scanlines" aria-hidden="true" />
+            <div className="home-noise absolute inset-0 z-0 pointer-events-none opacity-30" aria-hidden="true" />
+
+            {/* Tactical Corner reticles */}
+            <div className="hud-corner hud-corner-tl" style={{ borderColor: registeringEvent.accent }} />
+            <div className="hud-corner hud-corner-tr" style={{ borderColor: registeringEvent.accent }} />
+            <div className="hud-corner hud-corner-bl" style={{ borderColor: registeringEvent.accent }} />
+            <div className="hud-corner hud-corner-br" style={{ borderColor: registeringEvent.accent }} />
+
+            {/* Header */}
+            <header className="event-modal-topbar">
+              <div className="flex items-center gap-2">
+                <button
+                  className="event-modal-back-btn"
+                  onClick={() => {
+                    setSelectedEvent(registeringEvent);
+                    setRegisteringEvent(null);
+                  }}
+                  type="button"
+                >
+                  <ArrowLeft size={12} />
+                  <span>DETAILS</span>
+                </button>
+                <div
+                  className="event-modal-category-pill"
+                  style={{
+                    borderColor: `${registeringEvent.accent}66`,
+                    color: registeringEvent.accent,
+                    backgroundColor: `${registeringEvent.accent}14`,
+                  }}
+                >
+                  {registeringEvent.category.toUpperCase()}
+                </div>
+              </div>
+              <button
+                className="event-modal-close-btn"
+                aria-label="Close registration"
+                onClick={() => setRegisteringEvent(null)}
+                type="button"
+              >
+                <span className="event-modal-esc-hint">ESC</span>
+                <X size={15} />
+              </button>
+            </header>
+
+            {/* Modal Body */}
+            <div className="event-modal-body">
+              {/* Event Hero Area */}
+              <div className="event-modal-hero">
+                <div className="event-modal-hero-left">
+                  <h2 id="register-modal-title" className="event-modal-title">
+                    <GlitchText text={registeringEvent.title} />
+                  </h2>
+                  <p className="text-white/60 text-xs tracking-wider uppercase mt-1">
+                    {registeringEvent.venue} • {registeringEvent.date} ({registeringEvent.time})
+                  </p>
+                </div>
+                <div
+                  className="event-modal-watermark"
+                  style={{ color: registeringEvent.accent }}
+                  aria-hidden="true"
+                >
+                  REG
+                </div>
+              </div>
+
+              {!regSubmitted ? (
+                <form className="event-register-form" onSubmit={handleRegisterSubmit}>
+                  <div className="event-form-grid">
+                    <div className="event-form-group">
+                      <label className="event-form-label" htmlFor="reg-name">
+                        <User size={12} style={{ color: registeringEvent.accent }} />
+                        FULL NAME
+                      </label>
+                      <div className="event-form-input-wrap">
+                        <User className="event-form-input-icon" size={15} />
+                        <input
+                          id="reg-name"
+                          type="text"
+                          required
+                          placeholder="Your Full Name"
+                          className="event-form-input"
+                          value={regForm.name}
+                          onChange={(e) => setRegForm({ ...regForm, name: e.target.value })}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="event-form-group">
+                      <label className="event-form-label" htmlFor="reg-email">
+                        <Mail size={12} style={{ color: registeringEvent.accent }} />
+                        EMAIL ADDRESS
+                      </label>
+                      <div className="event-form-input-wrap">
+                        <Mail className="event-form-input-icon" size={15} />
+                        <input
+                          id="reg-email"
+                          type="email"
+                          required
+                          placeholder="your.email@example.com"
+                          className="event-form-input"
+                          value={regForm.email}
+                          onChange={(e) => setRegForm({ ...regForm, email: e.target.value })}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="event-form-group">
+                      <label className="event-form-label" htmlFor="reg-phone">
+                        <Phone size={12} style={{ color: registeringEvent.accent }} />
+                        CONTACT / PHONE NUMBER
+                      </label>
+                      <div className="event-form-input-wrap">
+                        <Phone className="event-form-input-icon" size={15} />
+                        <input
+                          id="reg-phone"
+                          type="tel"
+                          required
+                          placeholder="+91 98765 43210"
+                          className="event-form-input"
+                          value={regForm.phone}
+                          onChange={(e) => setRegForm({ ...regForm, phone: e.target.value })}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="event-form-group">
+                      <label className="event-form-label" htmlFor="reg-college">
+                        <Building2 size={12} style={{ color: registeringEvent.accent }} />
+                        COLLEGE / INSTITUTION
+                      </label>
+                      <div className="event-form-input-wrap">
+                        <Building2 className="event-form-input-icon" size={15} />
+                        <input
+                          id="reg-college"
+                          type="text"
+                          required
+                          placeholder="Institute / University Name"
+                          className="event-form-input"
+                          value={regForm.college}
+                          onChange={(e) => setRegForm({ ...regForm, college: e.target.value })}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Footer */}
+                  <footer className="event-modal-footer">
+                    <div className="event-modal-footer-actions">
+                      <button
+                        className="event-modal-secondary-btn"
+                        onClick={() => setRegisteringEvent(null)}
+                        type="button"
+                      >
+                        CANCEL
+                      </button>
+                      <button
+                        className="event-modal-primary-btn"
+                        style={{
+                          borderColor: registeringEvent.accent,
+                          background: `${registeringEvent.accent}22`,
+                        }}
+                        type="submit"
+                      >
+                        <span>CONFIRM REGISTRATION</span>
+                        <ArrowUpRight size={14} />
+                      </button>
+                    </div>
+                  </footer>
+                </form>
+              ) : (
+                <div className="flex-1 flex flex-col justify-center items-center text-center py-6 gap-4">
+                  <div
+                    className="p-3 rounded-full"
+                    style={{
+                      backgroundColor: `${registeringEvent.accent}18`,
+                      border: `1px solid ${registeringEvent.accent}`,
+                      boxShadow: `0 0 20px ${registeringEvent.accent}40`,
+                    }}
+                  >
+                    <CheckCircle2 size={36} style={{ color: registeringEvent.accent }} />
+                  </div>
+                  <div>
+                    <h3 className="text-xl sm:text-2xl font-bold uppercase tracking-wider text-white">
+                      REGISTRATION CONFIRMED
+                    </h3>
+                    <p className="text-sm font-mono mt-1" style={{ color: registeringEvent.accent }}>
+                      PASS ID: {regPassId}
+                    </p>
+                  </div>
+                  <p className="text-white/70 text-xs sm:text-sm max-w-md">
+                    Participant <span className="text-white font-medium">{regForm.name}</span> has been successfully registered for <span className="text-white font-medium">{registeringEvent.title}</span>. A confirmation pass has been reserved.
+                  </p>
+                  <button
+                    className="event-modal-primary-btn mt-2"
+                    style={{
+                      borderColor: registeringEvent.accent,
+                      background: `${registeringEvent.accent}25`,
+                    }}
+                    onClick={() => setRegisteringEvent(null)}
+                    type="button"
+                  >
+                    <span>DONE</span>
+                  </button>
+                </div>
+              )}
             </div>
           </section>
         </div>
