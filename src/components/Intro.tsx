@@ -101,17 +101,18 @@ export const Intro: React.FC = () => {
 
         {/* Robo-decode headline */}
         <h1
-          className="font-normal leading-tight flex flex-col items-center"
+          className="font-normal leading-tight flex flex-col items-center justify-center overflow-hidden"
           style={{
             fontFamily: "'Josefin Sans', sans-serif",
             fontSize: "clamp(1.5rem, 6.4vw, 4rem)",
             letterSpacing: "0.035em",
+            minHeight: "clamp(3.8rem, 15vw, 9.5rem)",
           }}
         >
           {/* Line 1 — always one line */}
-          <span className="whitespace-nowrap" style={{ color: "#ffffff" }} ref={part1Ref} />
+          <span className="whitespace-nowrap overflow-hidden inline-block" style={{ color: "#ffffff", lineHeight: 1.2 }} ref={part1Ref} />
           {/* Line 2 — LUCIFER + cursor inline */}
-          <span className="flex items-center justify-center">
+          <span className="flex items-center justify-center overflow-hidden" style={{ lineHeight: 1.2 }}>
             <span style={{ color: "#e03030" }} ref={part2Ref} />
             <span
               className="inline-block w-0.5 h-[1.1em] bg-red-500 ml-1.5 align-middle"

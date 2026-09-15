@@ -9,9 +9,9 @@ const EVENT_DATA = [
   },
   {
     id: 2,
-    title: "MAZE RUNNER 2D",
+    title: "ROBO DRIFT",
     date: "September 23, 2026",
-    description: "Design, calibrate, and guide autonomous or RC rovers through an intricate 2D labyrinth of obstacles.",
+    description: "Build a fast bot to conquer challenging obstacle terrain in a 2-bot head-to-head racing showdown.",
   },
   {
     id: 3,

@@ -1,9 +1,54 @@
 import Head from "next/head";
 import Link from "next/link";
-import { ArrowLeft, ArrowUpRight, CalendarDays, MapPin, Ticket, X, User, Mail, Phone, Building2, CheckCircle2, GraduationCap, Hash, MessageSquare, CreditCard } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, CalendarDays, MapPin, Ticket, X, User, Mail, Phone, Building2, CheckCircle2, GraduationCap, Hash, MessageSquare, CreditCard, FileText } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 
 type EventCategory = "All" | "Hardware" | "Software" | "Non-Tech" | "Flash" | "Photography";
+
+const HARDWARE_RULES: Record<"TERRA" | "DRIFT", {
+  id: "TERRA" | "DRIFT";
+  eventTitle: "TERRA DRIVE" | "ROBO DRIFT";
+  accent: string;
+  points: string[];
+}> = {
+  TERRA: {
+    id: "TERRA",
+    eventTitle: "TERRA DRIVE",
+    accent: "#ff2f3f",
+    points: [
+      "Team Size: Maximum 3 participants allowed per team. A maximum of 2 participants will be allowed in the arena.",
+      "Eligibility: A participant cannot be a member of 2 different teams in this event.",
+      "Bot Dimensions: Must not exceed 30 × 30 × 30 cm (with 10% tolerance) at the start of the event.",
+      "Bot Weight: Maximum weight of the bot must not exceed 2.7 kg.",
+      "Control: Manually controlled (maximum 2 participants controlling during the event). Autonomous bots based on microcontrollers are strictly not allowed.",
+      "Power Supply: Bots can be powered on-board as well as off-board. For off-board supply, wires must remain slacked at all times (maximum wire length: 6 meters).",
+      "Electrical Specs: Maximum allowable voltage is 15V – 18V. Maximum current allowed is 3A – 10A.",
+      "Chassis Integrity: The main chassis must remain the same throughout the entire event.",
+      "Time Limit & Objective: Bot starts from the starting point to overcome all obstacles and reach the finish line within the 10-minute time limit.",
+      "Arena & Terrain: Multi-terrain course featuring sand, pebbles, marbles, grease, bridges, cliffs, and obstacles (arena subject to modifications in the final round).",
+      "Fair Play & Decisions: Any action violating fair play leads to immediate disqualification. Decision of the coordinators will be final."
+    ],
+  },
+  DRIFT: {
+    id: "DRIFT",
+    eventTitle: "ROBO DRIFT",
+    accent: "#f05a2a",
+    points: [
+      "Team Size: Solo or team event. Maximum 1 to 3 participants allowed per team.",
+      "Eligibility: A participant cannot be a member of 2 different teams in this event.",
+      "Bot Dimensions: The size of the bot must not exceed 30 × 30 × 30 cm (measured with a tolerance of 10%).",
+      "Control: The robot must be controlled manually using either wired or wireless control (maximum 2 participants controlling during the event).",
+      "Power Supply: Bots can be powered on-board as well as off-board. Maximum voltage applied must not exceed 18V at any time (voltage cannot be increased or decreased).",
+      "AC Power Provided: Standard 220V, 50 Hz AC supply is provided. Participants must arrange any other power supply on their own.",
+      "Race Format: 2 teams / bots compete head-to-head at a time from respective starting points to overcome obstacles and reach a single finish point.",
+      "Winning Criteria: The 1st bot to reach the ending point in the shortest time wins the race.",
+      "Arena & Obstacles: Track features challenging obstacles and rough terrain (sand, bumpers, seesaws, iron chips, etc.).",
+      "Tournament Rounds: Total of 2 rounds — Preliminary Round and Final Round (arena may undergo modifications with new rules for finals).",
+      "Handling: Touching the bot during the competition is strictly prohibited.",
+      "Fair Play & Decisions: Any action violating fair play leads to immediate disqualification. Decision of the coordinators is final."
+    ],
+  },
+};
 
 const NOISE_CHARS = "v/R░01#%$@!?><{}[]|\\".split("");
 
@@ -43,43 +88,43 @@ function GlitchText({ text }: { text: string }) {
     return () => { clearTimeout(glitchTimeout); clearInterval(glitchInterval); };
   }, [text]);
 
-  return <span ref={ref}>{text}</span>;
+  return <span ref={ref} className="inline-block align-baseline">{text}</span>;
 }
 
 const EVENT_DATA = [
   // Hardware Events
   {
     number: "01",
-    title: "MAZE RUNNER 2D",
-    date: "23 SEP 2026",
-    time: "10:00 AM - 01:00 PM",
-    venue: "Robotics Arena",
-    category: "Hardware" as const,
-    description: "Design, calibrate, and navigate autonomous or manual bots through an intricate 2D maze filled with dead ends and tight turns.",
-    accent: "#ff2f3f",
-    fee: "₹25 / ₹39",
-    feeDetail: "1ST YR: ₹25 • REST: ₹39",
-  },
-  {
-    number: "02",
     title: "TERRA DRIVE",
     date: "23 SEP 2026",
-    time: "02:00 PM - 05:00 PM",
+    time: "10:00 AM - 01:00 PM",
     venue: "Mech Courtyard",
     category: "Hardware" as const,
-    description: "Command robust all-terrain rovers over rugged obstacles, steep inclines, and brutal suspension-testing tracks.",
-    accent: "#f05a2a",
+    description: "Build a manually controlled robot to conquer challenging obstacle terrain—sand, pebbles, marbles, grease, bridges, and cliffs—and reach the finish line within the 10-minute time limit.",
+    accent: "#ff2f3f",
     fee: "₹20 / ₹35",
     feeDetail: "1ST YR: ₹20 • REST: ₹35",
   },
   {
+    number: "02",
+    title: "ROBO DRIFT",
+    date: "23 SEP 2026",
+    time: "02:00 PM - 05:00 PM",
+    venue: "Robotics Arena",
+    category: "Hardware" as const,
+    description: "Build a strong, fast bot capable of racing through difficult rough terrain to outpace opponents in a 2-bot head-to-head showdown and reach the finish line in the shortest time.",
+    accent: "#f05a2a",
+    fee: "₹25 / ₹39",
+    feeDetail: "1ST YR: ₹25 • REST: ₹39",
+  },
+  {
     number: "03",
-    title: "COMBO (MAZE RUNNER + TERRA DRIVE)",
+    title: "COMBO (TERRA DRIVE + ROBO DRIFT)",
     date: "23 SEP 2026",
     time: "10:00 AM - 05:00 PM",
-    venue: "Robotics Arena & Mech Courtyard",
+    venue: "Mech Courtyard & Robotics Arena",
     category: "Hardware" as const,
-    description: "The ultimate dual hardware challenge combining both MAZE RUNNER 2D and TERRA DRIVE. Test labyrinth navigation speed and rugged obstacle endurance in one all-inclusive combo pass.",
+    description: "The ultimate dual hardware challenge combining both TERRA DRIVE and ROBO DRIFT. Conquer rugged all-terrain obstacles and test high-speed drift precision in one all-inclusive combo pass.",
     accent: "#ff4b26",
     fee: "₹40 / ₹65",
     feeDetail: "1ST YR: ₹40 • REST: ₹65",
@@ -237,6 +282,11 @@ export default function EventsPage() {
   });
   const [regSubmitted, setRegSubmitted] = useState(false);
   const [regPassId, setRegPassId] = useState("");
+  const [sameAsPhone, setSameAsPhone] = useState(false);
+
+  const [rulesModalOpen, setRulesModalOpen] = useState(false);
+  const [rulesActiveTab, setRulesActiveTab] = useState<"TERRA" | "DRIFT">("TERRA");
+  const [rulesMode, setRulesMode] = useState<"TERRA" | "DRIFT" | "COMBO">("COMBO");
 
   const visibleEvents = EVENT_DATA.filter((event) => activeFilter === "All" || event.category === activeFilter);
 
@@ -250,18 +300,19 @@ export default function EventsPage() {
   };
 
   useEffect(() => {
-    if (!selectedEvent && !registeringEvent) return;
+    if (!selectedEvent && !registeringEvent && !rulesModalOpen) return;
 
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setSelectedEvent(null);
         setRegisteringEvent(null);
+        setRulesModalOpen(false);
       }
     };
 
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
-  }, [selectedEvent, registeringEvent]);
+  }, [selectedEvent, registeringEvent, rulesModalOpen]);
 
   return (
     <>
@@ -428,6 +479,46 @@ export default function EventsPage() {
                 <p className="event-modal-lead">{selectedEvent.description}</p>
               </div>
 
+              {/* Hardware Rules Callout inside View Details */}
+              {selectedEvent.category === "Hardware" && (
+                <div className="flex items-center justify-between p-2.5 sm:p-3 border border-white/10 bg-white/[0.02]">
+                  <div className="flex items-center gap-2.5">
+                    <FileText size={15} style={{ color: selectedEvent.accent }} />
+                    <div>
+                      <span className="text-xs font-semibold tracking-wider text-white block">
+                        {selectedEvent.title.includes("COMBO")
+                          ? "OFFICIAL COMBO COMPETITION RULES"
+                          : `OFFICIAL ${selectedEvent.title} RULES`}
+                      </span>
+                      <span className="text-[0.68rem] text-white/50 block">
+                        Bot dimensions, weight limits, arena layout & scoring protocols
+                      </span>
+                    </div>
+                  </div>
+                  <button
+                    className="event-rules-button mt-0 shrink-0"
+                    onClick={() => {
+                      if (selectedEvent.title.includes("COMBO")) {
+                        setRulesMode("COMBO");
+                        setRulesActiveTab("TERRA");
+                      } else if (selectedEvent.title.includes("ROBO DRIFT")) {
+                        setRulesMode("DRIFT");
+                        setRulesActiveTab("DRIFT");
+                      } else {
+                        setRulesMode("TERRA");
+                        setRulesActiveTab("TERRA");
+                      }
+                      setRulesModalOpen(true);
+                      setSelectedEvent(null);
+                    }}
+                    type="button"
+                  >
+                    <FileText size={12} />
+                    <span>VIEW RULES</span>
+                  </button>
+                </div>
+              )}
+
               {/* Footer */}
               <footer className="event-modal-footer">
                 <div className="event-modal-footer-actions">
@@ -438,6 +529,29 @@ export default function EventsPage() {
                   >
                     DISMISS
                   </button>
+                  {selectedEvent.category === "Hardware" && (
+                    <button
+                      className="event-modal-rules-btn"
+                      onClick={() => {
+                        if (selectedEvent.title.includes("COMBO")) {
+                          setRulesMode("COMBO");
+                          setRulesActiveTab("TERRA");
+                        } else if (selectedEvent.title.includes("ROBO DRIFT")) {
+                          setRulesMode("DRIFT");
+                          setRulesActiveTab("DRIFT");
+                        } else {
+                          setRulesMode("TERRA");
+                          setRulesActiveTab("TERRA");
+                        }
+                        setRulesModalOpen(true);
+                        setSelectedEvent(null);
+                      }}
+                      type="button"
+                    >
+                      <FileText size={13} />
+                      <span>RULES</span>
+                    </button>
+                  )}
                   <button
                     className="event-modal-primary-btn"
                     style={{
@@ -448,6 +562,7 @@ export default function EventsPage() {
                       setRegisteringEvent(selectedEvent);
                       setSelectedEvent(null);
                       setRegSubmitted(false);
+                      setSameAsPhone(false);
                       setRegForm({
                         name: "",
                         email: "",
@@ -597,15 +712,23 @@ export default function EventsPage() {
                           </label>
                           <div className="event-form-input-wrap">
                             <GraduationCap className="event-form-input-icon" size={15} />
-                            <input
+                            <select
                               id="reg-dept"
-                              type="text"
                               required
-                              placeholder="e.g. CSE, ECE, ME, IT"
                               className="event-form-input"
+                              style={{ backgroundColor: "#060203" }}
                               value={regForm.department}
                               onChange={(e) => setRegForm({ ...regForm, department: e.target.value })}
-                            />
+                            >
+                              <option value="" disabled style={{ backgroundColor: "#060203" }}>
+                                Select Department
+                              </option>
+                              {["CSE", "IT", "ECE", "CS-DS", "EE", "ME", "BCA"].map((dept) => (
+                                <option key={dept} value={dept} style={{ backgroundColor: "#060203" }}>
+                                  {dept}
+                                </option>
+                              ))}
+                            </select>
                           </div>
                         </div>
 
@@ -664,7 +787,7 @@ export default function EventsPage() {
                         <div className="event-form-group">
                           <label className="event-form-label" htmlFor="reg-phone">
                             <Phone size={12} style={{ color: registeringEvent.accent }} />
-                            PHONE
+                            PHONE NUMBER
                           </label>
                           <div className="event-form-input-wrap">
                             <Phone className="event-form-input-icon" size={15} />
@@ -680,7 +803,7 @@ export default function EventsPage() {
                                 setRegForm((prev) => ({
                                   ...prev,
                                   phone: val,
-                                  wp: prev.wp === "" || prev.wp === prev.phone ? val : prev.wp,
+                                  wp: sameAsPhone ? val : prev.wp,
                                 }));
                               }}
                             />
@@ -692,17 +815,25 @@ export default function EventsPage() {
                           <div className="flex items-center justify-between">
                             <label className="event-form-label" htmlFor="reg-wp">
                               <MessageSquare size={12} style={{ color: registeringEvent.accent }} />
-                              WP (WHATSAPP)
+                              WHATSAPP NUMBER
                             </label>
-                            {regForm.phone && regForm.wp !== regForm.phone && (
-                              <button
-                                type="button"
-                                onClick={() => setRegForm({ ...regForm, wp: regForm.phone })}
-                                className="text-[0.6rem] text-white/50 hover:text-white underline cursor-pointer"
-                              >
-                                Same as Phone
-                              </button>
-                            )}
+                            <label className="flex items-center gap-1.5 cursor-pointer text-[0.68rem] text-white/75 hover:text-white select-none transition-colors">
+                              <input
+                                type="checkbox"
+                                checked={sameAsPhone}
+                                onChange={(e) => {
+                                  const checked = e.target.checked;
+                                  setSameAsPhone(checked);
+                                  if (checked) {
+                                    setRegForm((prev) => ({ ...prev, wp: prev.phone }));
+                                  }
+                                }}
+                                className="w-3.5 h-3.5 accent-red-500 rounded cursor-pointer"
+                              />
+                              <span className={sameAsPhone ? "text-red-400 font-semibold" : ""}>
+                                SAME AS PHONE
+                              </span>
+                            </label>
                           </div>
                           <div className="event-form-input-wrap">
                             <MessageSquare className="event-form-input-icon" size={15} />
@@ -713,7 +844,10 @@ export default function EventsPage() {
                               placeholder="WhatsApp Number"
                               className="event-form-input"
                               value={regForm.wp}
-                              onChange={(e) => setRegForm({ ...regForm, wp: e.target.value })}
+                              onChange={(e) => {
+                                setSameAsPhone(e.target.value !== "" && e.target.value === regForm.phone);
+                                setRegForm({ ...regForm, wp: e.target.value });
+                              }}
                             />
                           </div>
                         </div>
@@ -981,6 +1115,180 @@ export default function EventsPage() {
                   </button>
                 </div>
               )}
+            </div>
+          </section>
+        </div>
+      )}
+      {rulesModalOpen && (
+        <div
+          className="event-modal-backdrop"
+          onClick={() => setRulesModalOpen(false)}
+          role="presentation"
+        >
+          <section
+            className="event-modal"
+            aria-labelledby="rules-modal-title"
+            aria-modal="true"
+            role="dialog"
+            onClick={(event) => event.stopPropagation()}
+            style={{
+              borderColor: `${HARDWARE_RULES[rulesActiveTab].accent}55`,
+              boxShadow: `0 0 60px rgba(0, 0, 0, 0.95), 0 0 35px ${HARDWARE_RULES[rulesActiveTab].accent}20, inset 0 0 25px ${HARDWARE_RULES[rulesActiveTab].accent}08`,
+            }}
+          >
+            {/* Ambient dynamic glow */}
+            <div
+              className="event-modal-glow"
+              aria-hidden="true"
+              style={{
+                background: `radial-gradient(ellipse at 50% 0%, ${HARDWARE_RULES[rulesActiveTab].accent}30 0%, transparent 65%)`,
+              }}
+            />
+            <div className="event-modal-scanlines" aria-hidden="true" />
+            <div className="hud-corner hud-corner-tl" />
+            <div className="hud-corner hud-corner-tr" />
+            <div className="hud-corner hud-corner-bl" />
+            <div className="hud-corner hud-corner-br" />
+
+            {/* Topbar */}
+            <header className="event-modal-topbar">
+              <div className="flex items-center gap-2.5">
+                <span className="event-modal-live-dot" />
+                <span className="event-modal-sys-tag">
+                  {rulesMode === "COMBO"
+                    ? "COMBO (TERRA + DRIFT) — RULES & REGULATIONS"
+                    : `${HARDWARE_RULES[rulesActiveTab].eventTitle} — RULES & REGULATIONS`}
+                </span>
+              </div>
+              <button
+                className="event-modal-close-btn"
+                onClick={() => setRulesModalOpen(false)}
+                type="button"
+                aria-label="Close rules modal"
+              >
+                <span className="event-modal-esc-hint">[ESC]</span>
+                <X size={14} />
+              </button>
+            </header>
+
+            {/* Modal Body */}
+            <div className="event-modal-body">
+              {/* Tab Bar - only shown when viewing rules for COMBO */}
+              {rulesMode === "COMBO" && (
+                <div className="event-rules-tab-bar">
+                  <button
+                    className={`event-rules-tab ${rulesActiveTab === "TERRA" ? "is-active" : ""}`}
+                    onClick={() => setRulesActiveTab("TERRA")}
+                    type="button"
+                  >
+                    <span className="event-rules-tab-num">01</span>
+                    <span>TERRA DRIVE</span>
+                  </button>
+                  <button
+                    className={`event-rules-tab ${rulesActiveTab === "DRIFT" ? "is-active" : ""}`}
+                    onClick={() => setRulesActiveTab("DRIFT")}
+                    type="button"
+                  >
+                    <span className="event-rules-tab-num">02</span>
+                    <span>ROBO DRIFT</span>
+                  </button>
+                </div>
+              )}
+
+              {/* Scrollable Rules Content */}
+              <div className="event-rules-scroll">
+                {/* Event Heading */}
+                <div className="flex items-baseline justify-between border-b border-white/5 pb-2">
+                  <div>
+                    <h2 id="rules-modal-title" className="text-xl sm:text-2xl font-bold tracking-wider text-white uppercase">
+                      {HARDWARE_RULES[rulesActiveTab].eventTitle}
+                    </h2>
+                    <p className="text-xs text-white/60 tracking-wide mt-0.5">
+                      OFFICIAL REGULATIONS & COMPETITION RULES
+                    </p>
+                  </div>
+                  <span
+                    className="text-xs font-mono font-semibold px-2 py-0.5 border"
+                    style={{
+                      borderColor: `${HARDWARE_RULES[rulesActiveTab].accent}66`,
+                      color: HARDWARE_RULES[rulesActiveTab].accent,
+                      background: `${HARDWARE_RULES[rulesActiveTab].accent}12`,
+                    }}
+                  >
+                    HARDWARE
+                  </span>
+                </div>
+
+                {/* Simple Points List */}
+                <div className="event-rules-points-list">
+                  {HARDWARE_RULES[rulesActiveTab].points.map((point, idx) => (
+                    <div key={idx} className="event-rule-point">
+                      <span
+                        className="event-rule-index"
+                        style={{ color: HARDWARE_RULES[rulesActiveTab].accent }}
+                      >
+                        {String(idx + 1).padStart(2, "0")}.
+                      </span>
+                      <span className="event-rule-text">{point}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Rules Modal Footer */}
+              <footer className="event-modal-footer">
+                <div className="text-[0.62rem] tracking-wider text-neutral-400 hidden sm:block">
+                  <span className="text-red-400 font-semibold">NOTE:</span> MANDATORY TECHNICAL INSPECTION 30 MIN PRIOR TO RUN
+                </div>
+                <div className="event-modal-footer-actions">
+                  <button
+                    className="event-modal-secondary-btn"
+                    onClick={() => setRulesModalOpen(false)}
+                    type="button"
+                  >
+                    CLOSE
+                  </button>
+                  <button
+                    className="event-modal-primary-btn"
+                    style={{
+                      borderColor: HARDWARE_RULES[rulesActiveTab].accent,
+                      background: `${HARDWARE_RULES[rulesActiveTab].accent}18`,
+                    }}
+                    onClick={() => {
+                      const targetEvent = EVENT_DATA.find((e) =>
+                        rulesMode === "COMBO"
+                          ? e.title.includes("COMBO")
+                          : e.title.includes(HARDWARE_RULES[rulesActiveTab].eventTitle)
+                      );
+                      if (targetEvent) {
+                        setRulesModalOpen(false);
+                        setRegisteringEvent(targetEvent);
+                        setRegSubmitted(false);
+                        setSameAsPhone(false);
+                        setRegForm({
+                          name: "",
+                          email: "",
+                          phone: "",
+                          wp: "",
+                          department: "",
+                          classRoll: "",
+                          year: "1st Year",
+                          payment: "Online",
+                          college: "",
+                        });
+                      }
+                    }}
+                    type="button"
+                  >
+                    <span>
+                      {rulesMode === "COMBO"
+                        ? "REGISTER FOR COMBO PASS"
+                        : `REGISTER FOR ${HARDWARE_RULES[rulesActiveTab].eventTitle}`}
+                    </span>
+                    <ArrowUpRight size={14} />
+                  </button>
+                </div>
+              </footer>
             </div>
           </section>
         </div>

@@ -10,13 +10,19 @@
   }
 }
 
-html, body {
+html {
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+}
+
+body {
   margin: 0;
   padding: 0;
   background: #000;
   min-height: 100%;
   font-family: 'Josefin Sans', sans-serif;
   font-weight: 400;
+  overflow-x: hidden;
 }
 
 
@@ -114,11 +120,11 @@ html, body {
 .events-filter { border: 1px solid rgba(255, 255, 255, 0.13); padding: 0.65rem 1.2rem; color: rgba(255, 225, 225, 0.7); font-size: 0.85rem; letter-spacing: 0.06em; transition: border-color 180ms ease, background 180ms ease, color 180ms ease; }
 .events-filter:hover, .events-filter.is-active { border-color: rgba(255, 58, 70, 0.8); background: rgba(165, 16, 28, 0.22); color: #fff; }
 .events-list { margin-top: 1.25rem; }
-.event-row { display: grid; grid-template-columns: 4rem minmax(0, 1fr); gap: 1.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.12); padding: 1.35rem 0; transition: padding 220ms ease, background 220ms ease; }
-.event-row:hover { padding-right: 1rem; padding-left: 1rem; background: linear-gradient(90deg, rgba(110, 8, 18, 0.14), transparent); }
+.event-row { display: grid; grid-template-columns: 4rem minmax(0, 1fr); gap: 1.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.12); padding: 1.35rem 0.5rem; transition: background 220ms ease; }
+.event-row:hover { background: linear-gradient(90deg, rgba(110, 8, 18, 0.14), transparent); }
 .event-number { padding-top: 0.3rem; font-family: 'Josefin Sans', sans-serif; font-size: 2.2rem; }
 .event-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
-.event-heading h2 { margin: 0.35rem 0 0; color: #ff2030; font-family: 'Josefin Sans', sans-serif; font-size: clamp(2rem, 4vw, 3.4rem); font-weight: 400; letter-spacing: -0.03em; line-height: 1; transition: color 220ms ease; }
+.event-heading h2 { margin: 0.35rem 0 0; color: #ff2030; font-family: 'Josefin Sans', sans-serif; font-size: clamp(2rem, 4vw, 3.4rem); font-weight: 400; letter-spacing: -0.03em; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; transition: color 220ms ease; }
 .event-row:hover .event-heading h2 { color: #ffffff; }
 .event-arrow { color: rgba(255, 86, 86, 0.7); transition: transform 180ms ease, color 180ms ease; }
 .event-row:hover .event-arrow { color: #ff5260; transform: translate(3px, -3px); }
@@ -615,12 +621,175 @@ html, body {
   color: #ffffff;
 }
 
+/* Event Rules Button & Modal */
+.event-rules-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 1px solid rgba(255, 120, 50, 0.5);
+  background: rgba(255, 100, 30, 0.08);
+  padding: 0.65rem 0.85rem;
+  color: #ffb488;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  margin-top: 1.35rem;
+  transition: all 180ms ease;
+  cursor: pointer;
+}
+
+.event-rules-button:hover {
+  border-color: #ff6a2a;
+  background: rgba(255, 80, 20, 0.25);
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(255, 100, 30, 0.35);
+}
+
+.event-modal-rules-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 1px solid rgba(255, 120, 50, 0.45);
+  background: rgba(255, 100, 30, 0.08);
+  padding: 0.55rem 1rem;
+  color: #ffaa78;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+
+.event-modal-rules-btn:hover {
+  border-color: #ff6a2a;
+  background: rgba(255, 80, 20, 0.25);
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(255, 100, 30, 0.35);
+}
+
+/* Rules Modal Tabs */
+.event-rules-tab-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 0.75rem;
+}
+
+.event-rules-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.02);
+  padding: 0.45rem 0.95rem;
+  color: rgba(255, 220, 220, 0.6);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+
+.event-rules-tab-num {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.event-rules-tab:hover {
+  border-color: rgba(255, 120, 50, 0.5);
+  color: #ffffff;
+}
+
+.event-rules-tab.is-active {
+  border-color: #ff4b26;
+  background: rgba(255, 75, 38, 0.18);
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(255, 75, 38, 0.25);
+}
+
+.event-rules-tab.is-active .event-rules-tab-num {
+  color: #ff5a35;
+}
+
+/* Rules Scroll Container */
+.event-rules-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  overflow-y: auto;
+  padding-right: 0.35rem;
+  flex: 1;
+}
+
+.event-rules-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.event-rules-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+}
+.event-rules-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 75, 38, 0.45);
+  border-radius: 2px;
+}
+
+/* Simple Rules Point List */
+.event-rules-points-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  overflow-y: auto;
+  padding-right: 0.4rem;
+  flex: 1;
+}
+
+.event-rules-points-list::-webkit-scrollbar {
+  width: 4px;
+}
+.event-rules-points-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+}
+.event-rules-points-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 75, 38, 0.45);
+  border-radius: 2px;
+}
+
+.event-rule-point {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 0.65rem 0.85rem;
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  transition: all 160ms ease;
+}
+
+.event-rule-point:hover {
+  background: rgba(255, 255, 255, 0.035);
+  border-color: rgba(255, 80, 40, 0.35);
+}
+
+.event-rule-index {
+  font-family: monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.4;
+  flex-shrink: 0;
+}
+
+.event-rule-text {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+
 @media (max-width: 768px) { .home-events-link { display: none !important; } }
 @media (max-width: 640px) {
   .events-filter-bar { align-items: flex-start; flex-direction: column; gap: 0.8rem; }
   .events-count { margin-left: 0; }
-  .event-row { grid-template-columns: 2rem minmax(0, 1fr); gap: 0.8rem; }
-  .event-row:hover { padding-right: 0.5rem; padding-left: 0.5rem; }
+  .event-row { grid-template-columns: 2rem minmax(0, 1fr); gap: 0.8rem; padding: 1.15rem 0.25rem; }
+  .event-row:hover { background: linear-gradient(90deg, rgba(110, 8, 18, 0.14), transparent); }
   .event-number { font-size: 1.35rem; }
   .event-meta { flex-direction: column; gap: 0.55rem; }
 
