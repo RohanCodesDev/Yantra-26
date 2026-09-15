@@ -3,21 +3,21 @@ import React from "react";
 const EVENT_DATA = [
   {
     id: 1,
-    title: "Cyberpunk Hackathon",
-    date: "March 12, 2026",
-    description: "A 24-hour coding marathon to build the next generation of digital solutions.",
+    title: "CODEKSHETRA",
+    date: "September 23, 2026",
+    description: "An intense competitive programming battle where algorithm masters duel across high-pressure speed and logic rounds.",
   },
   {
     id: 2,
-    title: "Neon E-Sports",
-    date: "March 13, 2026",
-    description: "Compete in high-octane virtual arenas against the best gamers in the district.",
+    title: "MAZE RUNNER 2D",
+    date: "September 23, 2026",
+    description: "Design, calibrate, and guide autonomous or RC rovers through an intricate 2D labyrinth of obstacles.",
   },
   {
     id: 3,
-    title: "AI Synthesis Panel",
-    date: "March 14, 2026",
-    description: "Industry leaders discuss the convergence of artificial intelligence and human creativity.",
+    title: "VEDYANTRA",
+    date: "September 23, 2026",
+    description: "The flagship hackathon and software build sprint turning unorthodox ideas into functional digital products.",
   },
 ];
 

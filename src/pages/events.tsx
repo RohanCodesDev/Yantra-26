@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, CalendarDays, MapPin, Shield, X } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 
-type EventCategory = "All" | "Tech" | "Nontech" | "Flash" | "photography";
+type EventCategory = "All" | "Hardware" | "Software" | "Non-Tech" | "Flash" | "Photography";
 
 const NOISE_CHARS = "v/R░01#%$@!?><{}[]|\\".split("");
 
@@ -47,23 +47,168 @@ function GlitchText({ text }: { text: string }) {
 }
 
 const EVENT_DATA = [
-  { number: "01", title: "VEDYANTRA", date: "23 SEP 2026", time: "09:00 AM - 09:00 PM", venue: "Innovation Lab", category: "Tech" as const, description: "A fast-moving build sprint for teams turning strange ideas into useful digital tools.", accent: "#ff2f3f" },
-  { number: "02", title: "CODEKHESTRA", date: "23 SEP 2026", time: "10:00 AM - 06:00 PM", venue: "Main Arena", category: "Tech" as const, description: "High-pressure brackets, live spectators, and a final round made for the big screen.", accent: "#f05a2a" },
-  { number: "03", title: "AI Synthesis Panel", date: "23 SEP 2026", time: "11:30 AM - 12:30 PM", venue: "Auditorium", category: "Tech" as const, description: "A candid conversation about artificial intelligence, creative work, and what comes next.", accent: "#ff8a3d" },
-  { number: "04", title: "Design After Dark", date: "23 SEP 2026", time: "01:00 PM - 03:00 PM", venue: "Studio Floor", category: "photography" as const, description: "A visual challenge where teams shape a bold identity from a prompt revealed on the day.", accent: "#db304d" },
-  { number: "05", title: "Robo Rumble", date: "23 SEP 2026", time: "03:30 PM - 05:30 PM", venue: "Workshop Bay", category: "Tech" as const, description: "Build, battle, and improvise in a mechanical arena designed to reward clever engineering.", accent: "#ff4b26" },
-  { number: "06", title: "Open Mic: Frequency", date: "23 SEP 2026", time: "07:00 PM - 09:00 PM", venue: "The Red Room", category: "Nontech" as const, description: "Music, poetry, comedy, and unfiltered voices from the people who make the fest what it is.", accent: "#c8344e" },
-  { number: "07", title: "Battle of Bands", date: "23 SEP 2026", time: "10:00 AM - 12:00 PM", venue: "Main Stage", category: "Nontech" as const, description: "Live bands go head-to-head with original sets, electric energy, and a crowd-picked winner.", accent: "#e63b55" },
-  { number: "08", title: "Nritya", date: "23 SEP 2026", time: "12:30 PM - 02:00 PM", venue: "Cultural Court", category: "Nontech" as const, description: "A high-spirited dance showcase bringing classical, folk, and contemporary movement together.", accent: "#f06a45" },
-  { number: "09", title: "Street Play", date: "23 SEP 2026", time: "02:30 PM - 03:30 PM", venue: "Central Courtyard", category: "Nontech" as const, description: "Short, sharp performances that turn everyday stories into theatre with a point of view.", accent: "#cf3857" },
-  { number: "10", title: "Campus Canvas", date: "23 SEP 2026", time: "04:00 PM - 06:00 PM", venue: "Arts Pavilion", category: "Nontech" as const, description: "Artists collaborate on a live mural where every brushstroke becomes part of the festival story.", accent: "#ff7650" },
-  { number: "11", title: "Battle of Poets", date: "23 SEP 2026", time: "06:30 PM - 08:00 PM", venue: "The Red Room", category: "Nontech" as const, description: "Words take the stage in a fast-paced poetry slam judged by rhythm, wit, and feeling.", accent: "#b93d62" },
-  { number: "12", title: "Flash Mob", date: "23 SEP 2026", time: "11:00 AM - 11:15 AM", venue: "Central Courtyard", category: "Flash" as const, description: "A surprise burst of choreography appears in the crowd and turns the courtyard into a moving stage.", accent: "#ffb13b" },
-  { number: "13", title: "60-Second Stories", date: "23 SEP 2026", time: "02:00 PM - 02:30 PM", venue: "Main Stage", category: "Flash" as const, description: "Step up, take the mic, and tell a complete story before the countdown hits zero.", accent: "#ff6b35" },
-  { number: "14", title: "Quick Draw", date: "23 SEP 2026", time: "05:00 PM - 05:30 PM", venue: "Arts Pavilion", category: "Flash" as const, description: "Artists race the clock to turn a surprise prompt into a finished sketch in thirty minutes.", accent: "#ffd166" },
+  // Hardware Events
+  {
+    number: "01",
+    title: "MAZE RUNNER 2D",
+    date: "23 SEP 2026",
+    time: "10:00 AM - 01:00 PM",
+    venue: "Robotics Arena",
+    category: "Hardware" as const,
+    description: "Design, calibrate, and navigate autonomous or manual bots through an intricate 2D maze filled with dead ends and tight turns.",
+    accent: "#ff2f3f",
+  },
+  {
+    number: "02",
+    title: "TERRA DRIVE",
+    date: "23 SEP 2026",
+    time: "02:00 PM - 05:00 PM",
+    venue: "Mech Courtyard",
+    category: "Hardware" as const,
+    description: "Command robust all-terrain rovers over rugged obstacles, steep inclines, and brutal suspension-testing tracks.",
+    accent: "#f05a2a",
+  },
+  {
+    number: "03",
+    title: "COMBO",
+    date: "23 SEP 2026",
+    time: "11:00 AM - 02:00 PM",
+    venue: "Hardware Bay",
+    category: "Hardware" as const,
+    description: "A high-stakes dual engineering trial challenging teams with circuit diagnosis, rapid breadboarding, and mechanical assembly.",
+    accent: "#ff4b26",
+  },
+
+  // Software Events
+  {
+    number: "04",
+    title: "CODEKSHETRA",
+    date: "23 SEP 2026",
+    time: "10:00 AM - 01:00 PM",
+    venue: "Computing Lab",
+    category: "Software" as const,
+    description: "The ultimate competitive programming battleground where speed, logic, and algorithmic supremacy determine the victor.",
+    accent: "#ff3d5a",
+  },
+  {
+    number: "05",
+    title: "VEDYANTRA",
+    date: "23 SEP 2026",
+    time: "09:00 AM - 09:00 PM",
+    venue: "Innovation Hub",
+    category: "Software" as const,
+    description: "A powerhouse software hackathon and sprint where teams build bold, functional digital applications from scratch.",
+    accent: "#ff8a3d",
+  },
+
+  // Non-Tech Events
+  {
+    number: "06",
+    title: "MATCHSTICK ART",
+    date: "23 SEP 2026",
+    time: "10:30 AM - 12:30 PM",
+    venue: "Arts Pavilion",
+    category: "Non-Tech" as const,
+    description: "Channel patience and architectural flair to construct intricate geometric sculptures and structures using only matchsticks.",
+    accent: "#e63b55",
+  },
+  {
+    number: "07",
+    title: "XAGGERATE(WRITING)",
+    date: "23 SEP 2026",
+    time: "01:00 PM - 02:30 PM",
+    venue: "The Red Room",
+    category: "Non-Tech" as const,
+    description: "Push hyperbole, melodrama, and creative writing to their wildest limits in a fast-paced battle of exaggerated storytelling.",
+    accent: "#c8344e",
+  },
+  {
+    number: "08",
+    title: "XPRESSION(ART)",
+    date: "23 SEP 2026",
+    time: "02:00 PM - 04:00 PM",
+    venue: "Design Quad",
+    category: "Non-Tech" as const,
+    description: "Translate concepts, raw thoughts, and vivid color schemes onto canvas in an expressive live fine-arts duel.",
+    accent: "#f06a45",
+  },
+  {
+    number: "09",
+    title: "SHERLOCKOLOGY",
+    date: "23 SEP 2026",
+    time: "03:00 PM - 05:30 PM",
+    venue: "Central Amphitheatre",
+    category: "Non-Tech" as const,
+    description: "Step into the shoes of a consulting detective to decipher cryptic riddles, examine evidence, and solve the crime.",
+    accent: "#cf3857",
+  },
+  {
+    number: "10",
+    title: "TUNA TANK",
+    date: "23 SEP 2026",
+    time: "04:30 PM - 06:30 PM",
+    venue: "Auditorium Hall",
+    category: "Non-Tech" as const,
+    description: "Pitch absurd, eccentric, or surprisingly genius ventures to our eccentric panel of sharp-tongued angel investors.",
+    accent: "#ff7650",
+  },
+
+  // Flash Events
+  {
+    number: "11",
+    title: "WORDSWORTH",
+    date: "23 SEP 2026",
+    time: "11:30 AM - 12:15 PM",
+    venue: "Central Courtyard",
+    category: "Flash" as const,
+    description: "A high-octane vocabulary and anagram race testing quick recall, linguistic wit, and verbal reflex against the clock.",
+    accent: "#ffb13b",
+  },
+  {
+    number: "12",
+    title: "GUESS THE CELEB",
+    date: "23 SEP 2026",
+    time: "01:30 PM - 02:15 PM",
+    venue: "Student Hub",
+    category: "Flash" as const,
+    description: "Identify popular personalities from pixelated photos, disguised voices, and enigmatic hints before the buzzer sounds.",
+    accent: "#ff6b35",
+  },
+  {
+    number: "13",
+    title: "120 SEC ART GUESSING",
+    date: "23 SEP 2026",
+    time: "03:00 PM - 03:45 PM",
+    venue: "Open Arena",
+    category: "Flash" as const,
+    description: "A frantic drawing challenge where teams sketch and decipher high-speed prompts under a rigorous 120-second timer.",
+    accent: "#ffd166",
+  },
+  {
+    number: "14",
+    title: "ORIGAMI",
+    date: "23 SEP 2026",
+    time: "04:00 PM - 04:45 PM",
+    venue: "Activity Plaza",
+    category: "Flash" as const,
+    description: "Fold, crease, and craft intricate geometric designs and paper marvels within strict time constraints.",
+    accent: "#ff9f43",
+  },
+
+  // Photography
+  {
+    number: "15",
+    title: "COLORS",
+    date: "23 SEP 2026",
+    time: "All Day Submission",
+    venue: "Campus Wide",
+    category: "Photography" as const,
+    description: "Frame the vivid hues, dynamic light patterns, and raw festival atmosphere through your lens in this signature photo contest.",
+    accent: "#db304d",
+  },
 ];
 
-const FILTERS: EventCategory[] = ["All", "Tech", "Nontech", "Flash", "photography"];
+const FILTERS: EventCategory[] = ["All", "Hardware", "Software", "Non-Tech", "Flash", "Photography"];
 
 export default function EventsPage() {
   const [activeFilter, setActiveFilter] = useState<EventCategory>("All");
