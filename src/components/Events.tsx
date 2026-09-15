@@ -23,8 +23,8 @@ const EVENT_DATA = [
 
 export const Events: React.FC = () => {
   return (
-    <section className="relative py-20 px-6 max-w-7xl mx-auto z-10">
-      <h2 className="text-3xl md:text-5xl font-bold text-white mb-12 text-center uppercase tracking-widest">
+    <section className="relative py-12 md:py-14 -mt-6 md:-mt-10 px-6 max-w-7xl mx-auto z-10">
+      <h2 className="text-3xl md:text-5xl font-bold text-white mb-8 text-center uppercase tracking-widest">
         Upcoming <span className="text-red-600">Events</span>
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
-import { ArrowLeft, ArrowUpRight, CalendarDays, MapPin, Ticket, X, User, Mail, Phone, Building2, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, CalendarDays, MapPin, Ticket, X, User, Mail, Phone, Building2, CheckCircle2, GraduationCap, Hash, MessageSquare, CreditCard } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 
 type EventCategory = "All" | "Hardware" | "Software" | "Non-Tech" | "Flash" | "Photography";
@@ -57,6 +57,8 @@ const EVENT_DATA = [
     category: "Hardware" as const,
     description: "Design, calibrate, and navigate autonomous or manual bots through an intricate 2D maze filled with dead ends and tight turns.",
     accent: "#ff2f3f",
+    fee: "₹25 / ₹39",
+    feeDetail: "1ST YR: ₹25 • REST: ₹39",
   },
   {
     number: "02",
@@ -67,16 +69,20 @@ const EVENT_DATA = [
     category: "Hardware" as const,
     description: "Command robust all-terrain rovers over rugged obstacles, steep inclines, and brutal suspension-testing tracks.",
     accent: "#f05a2a",
+    fee: "₹20 / ₹35",
+    feeDetail: "1ST YR: ₹20 • REST: ₹35",
   },
   {
     number: "03",
-    title: "COMBO",
+    title: "COMBO (MAZE RUNNER + TERRA DRIVE)",
     date: "23 SEP 2026",
-    time: "11:00 AM - 02:00 PM",
-    venue: "Hardware Bay",
+    time: "10:00 AM - 05:00 PM",
+    venue: "Robotics Arena & Mech Courtyard",
     category: "Hardware" as const,
-    description: "A high-stakes dual engineering trial challenging teams with circuit diagnosis, rapid breadboarding, and mechanical assembly.",
+    description: "The ultimate dual hardware challenge combining both MAZE RUNNER 2D and TERRA DRIVE. Test labyrinth navigation speed and rugged obstacle endurance in one all-inclusive combo pass.",
     accent: "#ff4b26",
+    fee: "₹40 / ₹65",
+    feeDetail: "1ST YR: ₹40 • REST: ₹65",
   },
 
   // Software Events
@@ -89,6 +95,8 @@ const EVENT_DATA = [
     category: "Software" as const,
     description: "The ultimate competitive programming battleground where speed, logic, and algorithmic supremacy determine the victor.",
     accent: "#ff3d5a",
+    fee: "FREE",
+    feeDetail: "FREE ENTRY",
   },
   {
     number: "05",
@@ -99,6 +107,8 @@ const EVENT_DATA = [
     category: "Software" as const,
     description: "A powerhouse software hackathon and sprint where teams build bold, functional digital applications from scratch.",
     accent: "#ff8a3d",
+    fee: "₹20 / ₹30",
+    feeDetail: "1ST YR: ₹20 • REST: ₹30",
   },
 
   // Non-Tech Events
@@ -214,7 +224,17 @@ export default function EventsPage() {
   const [activeFilter, setActiveFilter] = useState<EventCategory>("All");
   const [selectedEvent, setSelectedEvent] = useState<typeof EVENT_DATA[0] | null>(null);
   const [registeringEvent, setRegisteringEvent] = useState<typeof EVENT_DATA[0] | null>(null);
-  const [regForm, setRegForm] = useState({ name: "", email: "", phone: "", college: "" });
+  const [regForm, setRegForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    wp: "",
+    department: "",
+    classRoll: "",
+    year: "1st Year",
+    payment: "Online" as "Online" | "Offline",
+    college: "",
+  });
   const [regSubmitted, setRegSubmitted] = useState(false);
   const [regPassId, setRegPassId] = useState("");
 
@@ -223,6 +243,7 @@ export default function EventsPage() {
   const handleRegisterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!regForm.name || !regForm.email || !regForm.phone) return;
+    if ((registeringEvent?.category === "Hardware" || registeringEvent?.category === "Software") && (!regForm.department || !regForm.classRoll || !regForm.wp)) return;
     const randomId = Math.floor(1000 + Math.random() * 9000);
     setRegPassId(`YN26-${registeringEvent?.number || "EV"}-${randomId}`);
     setRegSubmitted(true);
@@ -248,16 +269,16 @@ export default function EventsPage() {
         <title>Events | YANTRA 2026</title>
         <meta name="description" content="Explore every YANTRA 2026 event." />
       </Head>
-      <main className="events-page min-h-screen overflow-hidden text-white">
+      <main className="events-page min-h-screen w-full overflow-x-hidden text-white">
         <div className="events-grid" aria-hidden="true" />
-        <header className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-6 md:px-10">
+        <header className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4 md:px-10 md:py-5">
           <Link className="events-back-link" href="/" aria-label="Back to YANTRA home"><ArrowLeft size={16} /><span>YANTRA / 26</span></Link>
           <span className="events-status"><i /> SYSTEM ONLINE</span>
         </header>
-        <section className="relative z-10 mx-auto max-w-7xl px-6 pb-12 pt-16 text-center md:px-10 md:pt-24">
+        <section className="relative z-10 mx-auto max-w-7xl px-6 pb-6 pt-4 text-center md:px-10 md:pt-8 md:pb-8">
           <h1 className="events-title">Explore <em>Events</em></h1>
         </section>
-        <section className="relative z-10 mx-auto max-w-7xl px-6 pb-24 md:px-10">
+        <section className="relative z-10 mx-auto max-w-7xl px-6 pb-20 md:px-10">
           <div className="events-filter-bar" aria-label="Filter events by category">
             <span className="events-filter-label">FILTER BY</span>
             <div className="flex flex-wrap gap-2">
@@ -375,8 +396,8 @@ export default function EventsPage() {
                     <Ticket size={13} style={{ color: selectedEvent.accent }} />
                     REG. FEES
                   </span>
-                  <span className="event-modal-val">FREE</span>
-                  <span className="event-modal-subval">ENTRY</span>
+                  <span className="event-modal-val">{selectedEvent.fee || "FREE"}</span>
+                  <span className="event-modal-subval">{selectedEvent.feeDetail || "ENTRY"}</span>
                 </div>
               </div>
 
@@ -427,7 +448,17 @@ export default function EventsPage() {
                       setRegisteringEvent(selectedEvent);
                       setSelectedEvent(null);
                       setRegSubmitted(false);
-                      setRegForm({ name: "", email: "", phone: "", college: "" });
+                      setRegForm({
+                        name: "",
+                        email: "",
+                        phone: "",
+                        wp: "",
+                        department: "",
+                        classRoll: "",
+                        year: "1st Year",
+                        payment: "Online",
+                        college: "",
+                      });
                     }}
                     type="button"
                   >
@@ -536,85 +567,359 @@ export default function EventsPage() {
               {!regSubmitted ? (
                 <form className="event-register-form" onSubmit={handleRegisterSubmit}>
                   <div className="event-form-grid">
-                    <div className="event-form-group">
-                      <label className="event-form-label" htmlFor="reg-name">
-                        <User size={12} style={{ color: registeringEvent.accent }} />
-                        FULL NAME
-                      </label>
-                      <div className="event-form-input-wrap">
-                        <User className="event-form-input-icon" size={15} />
-                        <input
-                          id="reg-name"
-                          type="text"
-                          required
-                          placeholder="Your Full Name"
-                          className="event-form-input"
-                          value={regForm.name}
-                          onChange={(e) => setRegForm({ ...regForm, name: e.target.value })}
-                        />
-                      </div>
-                    </div>
+                    {registeringEvent.category === "Hardware" || registeringEvent.category === "Software" ? (
+                      <>
+                        {/* 1. Name */}
+                        <div className="event-form-group">
+                          <label className="event-form-label" htmlFor="reg-name">
+                            <User size={12} style={{ color: registeringEvent.accent }} />
+                            NAME
+                          </label>
+                          <div className="event-form-input-wrap">
+                            <User className="event-form-input-icon" size={15} />
+                            <input
+                              id="reg-name"
+                              type="text"
+                              required
+                              placeholder="Full Name"
+                              className="event-form-input"
+                              value={regForm.name}
+                              onChange={(e) => setRegForm({ ...regForm, name: e.target.value })}
+                            />
+                          </div>
+                        </div>
 
-                    <div className="event-form-group">
-                      <label className="event-form-label" htmlFor="reg-email">
-                        <Mail size={12} style={{ color: registeringEvent.accent }} />
-                        EMAIL ADDRESS
-                      </label>
-                      <div className="event-form-input-wrap">
-                        <Mail className="event-form-input-icon" size={15} />
-                        <input
-                          id="reg-email"
-                          type="email"
-                          required
-                          placeholder="your.email@example.com"
-                          className="event-form-input"
-                          value={regForm.email}
-                          onChange={(e) => setRegForm({ ...regForm, email: e.target.value })}
-                        />
-                      </div>
-                    </div>
+                        {/* 2. Department */}
+                        <div className="event-form-group">
+                          <label className="event-form-label" htmlFor="reg-dept">
+                            <GraduationCap size={12} style={{ color: registeringEvent.accent }} />
+                            DEPARTMENT
+                          </label>
+                          <div className="event-form-input-wrap">
+                            <GraduationCap className="event-form-input-icon" size={15} />
+                            <input
+                              id="reg-dept"
+                              type="text"
+                              required
+                              placeholder="e.g. CSE, ECE, ME, IT"
+                              className="event-form-input"
+                              value={regForm.department}
+                              onChange={(e) => setRegForm({ ...regForm, department: e.target.value })}
+                            />
+                          </div>
+                        </div>
 
-                    <div className="event-form-group">
-                      <label className="event-form-label" htmlFor="reg-phone">
-                        <Phone size={12} style={{ color: registeringEvent.accent }} />
-                        CONTACT / PHONE NUMBER
-                      </label>
-                      <div className="event-form-input-wrap">
-                        <Phone className="event-form-input-icon" size={15} />
-                        <input
-                          id="reg-phone"
-                          type="tel"
-                          required
-                          placeholder="+91 98765 43210"
-                          className="event-form-input"
-                          value={regForm.phone}
-                          onChange={(e) => setRegForm({ ...regForm, phone: e.target.value })}
-                        />
-                      </div>
-                    </div>
+                        {/* 3. Class Roll */}
+                        <div className="event-form-group">
+                          <label className="event-form-label" htmlFor="reg-roll">
+                            <Hash size={12} style={{ color: registeringEvent.accent }} />
+                            CLASS ROLL
+                          </label>
+                          <div className="event-form-input-wrap">
+                            <Hash className="event-form-input-icon" size={15} />
+                            <input
+                              id="reg-roll"
+                              type="text"
+                              required
+                              placeholder="e.g. 24/CSE/042"
+                              className="event-form-input"
+                              value={regForm.classRoll}
+                              onChange={(e) => setRegForm({ ...regForm, classRoll: e.target.value })}
+                            />
+                          </div>
+                        </div>
 
-                    <div className="event-form-group">
-                      <label className="event-form-label" htmlFor="reg-college">
-                        <Building2 size={12} style={{ color: registeringEvent.accent }} />
-                        COLLEGE / INSTITUTION
-                      </label>
-                      <div className="event-form-input-wrap">
-                        <Building2 className="event-form-input-icon" size={15} />
-                        <input
-                          id="reg-college"
-                          type="text"
-                          required
-                          placeholder="Institute / University Name"
-                          className="event-form-input"
-                          value={regForm.college}
-                          onChange={(e) => setRegForm({ ...regForm, college: e.target.value })}
-                        />
-                      </div>
-                    </div>
+                        {/* 4. Year */}
+                        <div className="event-form-group">
+                          <label className="event-form-label" htmlFor="reg-year">
+                            <Ticket size={12} style={{ color: registeringEvent.accent }} />
+                            YEAR
+                          </label>
+                          <div className="event-form-input-wrap">
+                            <select
+                              id="reg-year"
+                              required
+                              className="event-form-input"
+                              style={{ backgroundColor: "#060203" }}
+                              value={regForm.year}
+                              onChange={(e) => setRegForm({ ...regForm, year: e.target.value })}
+                            >
+                              <option value="1st Year" style={{ backgroundColor: "#060203" }}>
+                                1st Year {registeringEvent.fee && registeringEvent.fee !== "FREE" ? `(${registeringEvent.feeDetail?.split("•")[0]?.trim() || ""})` : "(Free)"}
+                              </option>
+                              <option value="2nd Year" style={{ backgroundColor: "#060203" }}>
+                                2nd Year {registeringEvent.fee && registeringEvent.fee !== "FREE" ? `(${registeringEvent.feeDetail?.split("•")[1]?.trim() || ""})` : "(Free)"}
+                              </option>
+                              <option value="3rd Year" style={{ backgroundColor: "#060203" }}>
+                                3rd Year {registeringEvent.fee && registeringEvent.fee !== "FREE" ? `(${registeringEvent.feeDetail?.split("•")[1]?.trim() || ""})` : "(Free)"}
+                              </option>
+                              <option value="4th Year" style={{ backgroundColor: "#060203" }}>
+                                4th Year {registeringEvent.fee && registeringEvent.fee !== "FREE" ? `(${registeringEvent.feeDetail?.split("•")[1]?.trim() || ""})` : "(Free)"}
+                              </option>
+                            </select>
+                          </div>
+                        </div>
+
+                        {/* 5. Phone */}
+                        <div className="event-form-group">
+                          <label className="event-form-label" htmlFor="reg-phone">
+                            <Phone size={12} style={{ color: registeringEvent.accent }} />
+                            PHONE
+                          </label>
+                          <div className="event-form-input-wrap">
+                            <Phone className="event-form-input-icon" size={15} />
+                            <input
+                              id="reg-phone"
+                              type="tel"
+                              required
+                              placeholder="+91 98765 43210"
+                              className="event-form-input"
+                              value={regForm.phone}
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                setRegForm((prev) => ({
+                                  ...prev,
+                                  phone: val,
+                                  wp: prev.wp === "" || prev.wp === prev.phone ? val : prev.wp,
+                                }));
+                              }}
+                            />
+                          </div>
+                        </div>
+
+                        {/* 6. WP (WhatsApp) */}
+                        <div className="event-form-group">
+                          <div className="flex items-center justify-between">
+                            <label className="event-form-label" htmlFor="reg-wp">
+                              <MessageSquare size={12} style={{ color: registeringEvent.accent }} />
+                              WP (WHATSAPP)
+                            </label>
+                            {regForm.phone && regForm.wp !== regForm.phone && (
+                              <button
+                                type="button"
+                                onClick={() => setRegForm({ ...regForm, wp: regForm.phone })}
+                                className="text-[0.6rem] text-white/50 hover:text-white underline cursor-pointer"
+                              >
+                                Same as Phone
+                              </button>
+                            )}
+                          </div>
+                          <div className="event-form-input-wrap">
+                            <MessageSquare className="event-form-input-icon" size={15} />
+                            <input
+                              id="reg-wp"
+                              type="tel"
+                              required
+                              placeholder="WhatsApp Number"
+                              className="event-form-input"
+                              value={regForm.wp}
+                              onChange={(e) => setRegForm({ ...regForm, wp: e.target.value })}
+                            />
+                          </div>
+                        </div>
+
+                        {/* 7. Email */}
+                        <div className="event-form-group">
+                          <label className="event-form-label" htmlFor="reg-email">
+                            <Mail size={12} style={{ color: registeringEvent.accent }} />
+                            EMAIL
+                          </label>
+                          <div className="event-form-input-wrap">
+                            <Mail className="event-form-input-icon" size={15} />
+                            <input
+                              id="reg-email"
+                              type="email"
+                              required
+                              placeholder="your.email@example.com"
+                              className="event-form-input"
+                              value={regForm.email}
+                              onChange={(e) => setRegForm({ ...regForm, email: e.target.value })}
+                            />
+                          </div>
+                        </div>
+
+                        {/* 8. Payment Option */}
+                        <div className="event-form-group">
+                          <label className="event-form-label">
+                            <CreditCard size={12} style={{ color: registeringEvent.accent }} />
+                            {registeringEvent.fee === "FREE" ? "PAYMENT STATUS" : "PAYMENT OPTION"}
+                          </label>
+                          {registeringEvent.fee === "FREE" ? (
+                            <div className="flex items-center justify-center border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 py-2.5 px-3 text-xs font-mono tracking-wider">
+                              FREE ENTRY (NO PAYMENT REQUIRED)
+                            </div>
+                          ) : (
+                            <div className="grid grid-cols-2 gap-2 h-full">
+                              <button
+                                type="button"
+                                className={`flex items-center justify-center gap-1.5 border px-2 py-2 text-xs font-mono tracking-wider transition-all ${
+                                  regForm.payment === "Online"
+                                    ? "text-white"
+                                    : "border-white/15 bg-white/5 text-white/60 hover:border-white/30"
+                                }`}
+                                style={
+                                  regForm.payment === "Online"
+                                    ? {
+                                        borderColor: registeringEvent.accent,
+                                        backgroundColor: `${registeringEvent.accent}25`,
+                                        boxShadow: `0 0 10px ${registeringEvent.accent}30`,
+                                      }
+                                    : {}
+                                }
+                                onClick={() => setRegForm({ ...regForm, payment: "Online" })}
+                              >
+                                <span
+                                  className="w-1.5 h-1.5 rounded-full"
+                                  style={{
+                                    backgroundColor:
+                                      regForm.payment === "Online"
+                                        ? registeringEvent.accent
+                                        : "rgba(255,255,255,0.3)",
+                                  }}
+                                />
+                                ONLINE
+                              </button>
+                              <button
+                                type="button"
+                                className={`flex items-center justify-center gap-1.5 border px-2 py-2 text-xs font-mono tracking-wider transition-all ${
+                                  regForm.payment === "Offline"
+                                    ? "text-white"
+                                    : "border-white/15 bg-white/5 text-white/60 hover:border-white/30"
+                                }`}
+                                style={
+                                  regForm.payment === "Offline"
+                                    ? {
+                                        borderColor: registeringEvent.accent,
+                                        backgroundColor: `${registeringEvent.accent}25`,
+                                        boxShadow: `0 0 10px ${registeringEvent.accent}30`,
+                                      }
+                                    : {}
+                                }
+                                onClick={() => setRegForm({ ...regForm, payment: "Offline" })}
+                              >
+                                <span
+                                  className="w-1.5 h-1.5 rounded-full"
+                                  style={{
+                                    backgroundColor:
+                                      regForm.payment === "Offline"
+                                        ? registeringEvent.accent
+                                        : "rgba(255,255,255,0.3)",
+                                  }}
+                                />
+                                OFFLINE
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="event-form-group">
+                          <label className="event-form-label" htmlFor="reg-name">
+                            <User size={12} style={{ color: registeringEvent.accent }} />
+                            FULL NAME
+                          </label>
+                          <div className="event-form-input-wrap">
+                            <User className="event-form-input-icon" size={15} />
+                            <input
+                              id="reg-name"
+                              type="text"
+                              required
+                              placeholder="Your Full Name"
+                              className="event-form-input"
+                              value={regForm.name}
+                              onChange={(e) => setRegForm({ ...regForm, name: e.target.value })}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="event-form-group">
+                          <label className="event-form-label" htmlFor="reg-email">
+                            <Mail size={12} style={{ color: registeringEvent.accent }} />
+                            EMAIL ADDRESS
+                          </label>
+                          <div className="event-form-input-wrap">
+                            <Mail className="event-form-input-icon" size={15} />
+                            <input
+                              id="reg-email"
+                              type="email"
+                              required
+                              placeholder="your.email@example.com"
+                              className="event-form-input"
+                              value={regForm.email}
+                              onChange={(e) => setRegForm({ ...regForm, email: e.target.value })}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="event-form-group">
+                          <label className="event-form-label" htmlFor="reg-phone">
+                            <Phone size={12} style={{ color: registeringEvent.accent }} />
+                            CONTACT / PHONE NUMBER
+                          </label>
+                          <div className="event-form-input-wrap">
+                            <Phone className="event-form-input-icon" size={15} />
+                            <input
+                              id="reg-phone"
+                              type="tel"
+                              required
+                              placeholder="+91 98765 43210"
+                              className="event-form-input"
+                              value={regForm.phone}
+                              onChange={(e) => setRegForm({ ...regForm, phone: e.target.value })}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="event-form-group">
+                          <label className="event-form-label" htmlFor="reg-college">
+                            <Building2 size={12} style={{ color: registeringEvent.accent }} />
+                            COLLEGE / INSTITUTION
+                          </label>
+                          <div className="event-form-input-wrap">
+                            <Building2 className="event-form-input-icon" size={15} />
+                            <input
+                              id="reg-college"
+                              type="text"
+                              required
+                              placeholder="Institute / University Name"
+                              className="event-form-input"
+                              value={regForm.college}
+                              onChange={(e) => setRegForm({ ...regForm, college: e.target.value })}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="event-form-group sm:col-span-2">
+                          <label className="event-form-label" htmlFor="reg-year">
+                            <Ticket size={12} style={{ color: registeringEvent.accent }} />
+                            YEAR OF STUDY
+                          </label>
+                          <div className="event-form-input-wrap">
+                            <select
+                              id="reg-year"
+                              required
+                              className="event-form-input"
+                              style={{ backgroundColor: "#060203" }}
+                              value={regForm.year}
+                              onChange={(e) => setRegForm({ ...regForm, year: e.target.value })}
+                            >
+                              <option value="1st Year" style={{ backgroundColor: "#060203" }}>1st Year</option>
+                              <option value="2nd Year" style={{ backgroundColor: "#060203" }}>2nd Year</option>
+                              <option value="3rd Year" style={{ backgroundColor: "#060203" }}>3rd Year</option>
+                              <option value="4th Year" style={{ backgroundColor: "#060203" }}>4th Year</option>
+                            </select>
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
 
                   {/* Footer */}
-                  <footer className="event-modal-footer">
+                  <footer className="event-modal-footer flex items-center justify-between">
+                    <div className="text-[0.72rem] font-mono tracking-wider" style={{ color: registeringEvent.accent }}>
+                      PAYABLE: {registeringEvent.fee && registeringEvent.fee !== "FREE" ? (regForm.year === "1st Year" ? registeringEvent.feeDetail?.split("•")[0]?.trim() : registeringEvent.feeDetail?.split("•")[1]?.trim()) : "FREE ENTRY"}
+                    </div>
                     <div className="event-modal-footer-actions">
                       <button
                         className="event-modal-secondary-btn"
@@ -658,7 +963,10 @@ export default function EventsPage() {
                     </p>
                   </div>
                   <p className="text-white/70 text-xs sm:text-sm max-w-md">
-                    Participant <span className="text-white font-medium">{regForm.name}</span> has been successfully registered for <span className="text-white font-medium">{registeringEvent.title}</span>. A confirmation pass has been reserved.
+                    Participant <span className="text-white font-medium">{regForm.name}</span> ({regForm.year}{regForm.department ? `, ${regForm.department}` : ""}) has been registered for <span className="text-white font-medium">{registeringEvent.title}</span>. Total Fee: <span className="font-semibold text-white">{registeringEvent.fee && registeringEvent.fee !== "FREE" ? (regForm.year === "1st Year" ? registeringEvent.feeDetail?.split("•")[0]?.trim() : registeringEvent.feeDetail?.split("•")[1]?.trim()) : "FREE ENTRY"}</span>
+                    {registeringEvent.fee && registeringEvent.fee !== "FREE" && (
+                      <> • Payment Mode: <span className="font-semibold text-white">{regForm.payment}</span></>
+                    )}.
                   </p>
                   <button
                     className="event-modal-primary-btn mt-2"
